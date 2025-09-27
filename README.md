@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Museum Guide Skeleton
 
-## Getting Started
+Minimal Next.js App Router project with TypeScript for showcasing traditional crafts.
 
-First, run the development server:
+## What is included
+- App Router pages for `/lang`, `/home`, and `/crafts/[slug]`
+- Cookie driven user preference stored as `ux_pref`
+- Three placeholder modals (`Event`, `Demo`, `Chatbot`) implemented with `<dialog>`
+- Supabase Storage helper that resolves public URLs from stored paths
+- Sample craft seed data with multilingual fields and Supabase storage paths only
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Project structure
+```
+app/
+  crafts/[slug]/page.tsx
+  home/page.tsx
+  lang/actions.ts
+  lang/page.tsx
+  layout.tsx
+  page.tsx
+components/
+  CraftCard.tsx
+  ImageGrid.tsx
+  modals/
+    ChatbotModal.tsx
+    DemoModal.tsx
+    EventModal.tsx
+lib/
+  cookies.ts
+  i18n.ts
+  supabasePublic.ts
+types/
+  craft.ts
+data/
+  crafts.seed.ts
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Environment
+Copy `.env.local.example` to `.env.local` and provide `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` values. Only the storage path is stored in data; URLs are resolved at render time.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Usage
+```
+pnpm install
+pnpm dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Visit `/lang` to set language and age band. Users without `ux_pref` cookie are redirected there automatically. Once saved, go to `/home` to open the placeholder modals and browse sample crafts.
