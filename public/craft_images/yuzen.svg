@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="240" viewBox="0 0 320 240">
+  <defs>
+    <linearGradient id="grad-yuzen" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#cffafe" />
+      <stop offset="100%" stop-color="#22d3ee" />
+    </linearGradient>
+    <pattern id="pattern-yuzen" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M0 12h24" stroke="#0ea5e9" stroke-width="1.5" stroke-opacity="0.4" />
+      <path d="M12 0v24" stroke="#0284c7" stroke-width="1.5" stroke-opacity="0.25" />
+      <circle cx="6" cy="6" r="3" fill="#f472b6" fill-opacity="0.5" />
+      <circle cx="18" cy="18" r="3" fill="#f472b6" fill-opacity="0.5" />
+    </pattern>
+  </defs>
+  <rect width="320" height="240" fill="url(#grad-yuzen)" />
+  <g transform="translate(36 42)">
+    <rect width="248" height="156" rx="24" fill="white" fill-opacity="0.4" />
+    <rect x="12" y="12" width="224" height="132" rx="20" fill="url(#pattern-yuzen)" />
+  </g>
+  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="'Noto Sans JP', sans-serif" font-size="30" fill="#0c4a6e">
+    京友禅
+  </text>
+</svg>

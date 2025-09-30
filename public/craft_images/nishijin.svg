@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="240" viewBox="0 0 320 240">
+  <defs>
+    <linearGradient id="grad-nishijin" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fdf2f8" />
+      <stop offset="100%" stop-color="#c084fc" />
+    </linearGradient>
+    <pattern id="pattern-weave" width="20" height="20" patternUnits="userSpaceOnUse">
+      <rect x="0" y="0" width="20" height="20" fill="#ede9fe" />
+      <path d="M0 10h20M10 0v20" stroke="#a855f7" stroke-width="2" stroke-opacity="0.4" />
+    </pattern>
+  </defs>
+  <rect width="320" height="240" fill="url(#grad-nishijin)" />
+  <rect x="32" y="32" width="256" height="176" rx="16" fill="url(#pattern-weave)" opacity="0.9" />
+  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="'Noto Sans JP', sans-serif" font-size="32" fill="#581c87">
+    西陣織
+  </text>
+</svg>

@@ -51,13 +51,16 @@ export interface CraftItem {
 export function getPublicUrl(path: string) {
   const baseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   if (!baseUrl || baseUrl === "undefined" || baseUrl === "null") {
+    if (!path) {
+      return "/placeholder.svg";
+    }
     if (path.startsWith("http://") || path.startsWith("https://")) {
       return path;
     }
     if (path.startsWith("/")) {
       return path;
     }
-    return "/placeholder.svg";
+    return `/${path.replace(/^\/+/u, "")}`;
   }
   return `${baseUrl}/storage/v1/object/public/${path}`;
 }
@@ -89,7 +92,7 @@ export const EXAMPLE_NISHIJIN: CraftItem = {
   },
   details: { path: 'craft_texts/nishijin.md', format: 'md' },
   images: [
-    { path: 'craft_images/nishijin.png' }
+    { path: 'craft_images/nishijin.svg' }
   ]
 };
 
@@ -140,7 +143,7 @@ export const SEED: CraftItem[] = [
       en: 'Nishijin weaving is characterized by intricate patterns using pre-dyed threads...',
       zh: '西阵织物的特点是使用预染线创造复杂的图案...'
     },
-    images: [{ path: 'craft_images/nishijin.png' }]
+    images: [{ path: 'craft_images/nishijin.svg' }]
   },
   {
     id: 102,
@@ -157,7 +160,7 @@ export const SEED: CraftItem[] = [
       en: 'This technique creates complex patterns by binding sections of fabric...',
       zh: '通过不同的捆扎方式创造复杂的图案...'
     },
-    images: [{ path: 'craft_images/kanoko.png' }]
+    images: [{ path: 'craft_images/kanoko.svg' }]
   },
   {
     id: 103,
@@ -174,7 +177,7 @@ export const SEED: CraftItem[] = [
       en: 'Kyoto Yuzen was established in the Edo period...',
       zh: '京友禅起源于江户时代，以丰富的彩绘著称...'
     },
-    images: [{ path: 'craft_images/yuzen.png' }]
+    images: [{ path: 'craft_images/yuzen.svg' }]
   },
   {
     id: 104,
@@ -191,7 +194,7 @@ export const SEED: CraftItem[] = [
       en: 'Japanese gardens include various styles such as dry landscapes...',
       zh: '日本庭园包括枯山水、池泉庭园等多种形式...'
     },
-    images: [{ path: 'craft_images/zoen.png' }]
+    images: [{ path: 'craft_images/zoen.svg' }]
   },
   {
     id: 105,
@@ -208,7 +211,7 @@ export const SEED: CraftItem[] = [
       en: 'Used for tea utensils, flower baskets, and more...',
       zh: '广泛用于茶具、花器等...'
     },
-    images: [{ path: 'craft_images/bamboo.png' }]
+    images: [{ path: 'craft_images/bamboo.svg' }]
   }
 ];
 
