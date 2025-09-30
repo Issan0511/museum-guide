@@ -73,8 +73,7 @@ export const EXAMPLE_NISHIJIN: CraftItem = {
   },
   details: { path: 'craft_texts/nishijin.md', format: 'md' },
   images: [
-    { path: 'craft_images/nishijin.png' },
-    { path: 'crafts/101/detail-1.jpg' }
+    { path: 'craft_images/nishijin.png' }
   ]
 };
 
@@ -111,17 +110,89 @@ export const CraftItemZ = z.object({
 // ---------- 6) Minimal seed JSON ----------
 export const SEED: CraftItem[] = [
   {
-    id: 1,
-    slug: 'maki-e',
-    name: { ja: '蒔絵', en: 'Maki-e', zh: '撒绘' },
-    summary: { ja: '漆に金銀粉を蒔いて加飾する技法。', en: 'Urushi lacquer sprinkled with gold/silver powder.', zh: '在漆上撒金银粉进行装饰的技法。' },
-    description: {
-      ja: '蒔絵は、日本独自の漆芸技法で、漆の表面に金や銀の粉を蒔き、豪華で繊細な装飾を施すものです。平安時代から発展し、茶道具や調度品、工芸品などに広く用いられてきました。',
-      en: 'Maki-e is a unique Japanese lacquer technique where gold or silver powder is sprinkled onto wet lacquer to create luxurious and delicate designs. Originating in the Heian period, it has been widely used for tea utensils, furnishings, and various crafts.',
-      zh: '撒绘是一种日本独特的漆艺技法，通过在湿漆上撒金银粉，形成华丽精致的装饰。起源于平安时代，被广泛应用于茶具、家具和各种工艺品。'
+    id: 101,
+    slug: 'nishijin',
+    name: { ja: '西陣織', en: 'Nishijin Weaving', zh: '西阵织物' },
+    kana: 'にしじんおり',
+    summary: {
+      ja: '京都市北西部・西陣地域を中心に発展した高級絹織物。',
+      en: 'Luxury silk textiles from Kyoto’s Nishijin district.',
+      zh: '源自京都西阵地区的高级丝绸织物。'
     },
-    details: { path: 'craft_texts/maki-e.md', format: 'md' },
-    images: [{ path: 'crafts/1/main.jpg' }]
+    description: {
+      ja: '西陣織は先染め糸を用いた精緻な文様表現が特徴で...',
+      en: 'Nishijin weaving is characterized by intricate patterns using pre-dyed threads...',
+      zh: '西阵织物的特点是使用预染线创造复杂的图案...'
+    },
+    images: [{ path: 'craft_images/nishijin.png' }]
   },
-  EXAMPLE_NISHIJIN
+  {
+    id: 102,
+    slug: 'kanoko',
+    name: { ja: '京鹿の子絞', en: 'Kyoto Kanoko Shibori', zh: '京鹿子绞染' },
+    kana: 'きょうかのこしぼり',
+    summary: {
+      ja: '布を糸で括り防染して模様を作る伝統染色技法。',
+      en: 'Traditional tie-dye technique using resist dyeing.',
+      zh: '通过捆扎防染形成图案的传统染色技法。'
+    },
+    description: {
+      ja: '京鹿の子絞は多彩な括り技法により複雑な模様を作り出す...',
+      en: 'This technique creates complex patterns by binding sections of fabric...',
+      zh: '通过不同的捆扎方式创造复杂的图案...'
+    },
+    images: [{ path: 'craft_images/kanoko.png' }]
+  },
+  {
+    id: 103,
+    slug: 'yuzen',
+    name: { ja: '京友禅', en: 'Kyoto Yuzen Dyeing', zh: '京友禅染' },
+    kana: 'きょうゆうぜん',
+    summary: {
+      ja: '手描きによる華やかな模様が特徴の染色技法。',
+      en: 'Hand-painted dyeing technique with vivid patterns.',
+      zh: '以手绘华丽图案为特色的染色技法。'
+    },
+    description: {
+      ja: '京友禅は江戸時代に確立され、多彩な彩色が特徴...',
+      en: 'Kyoto Yuzen was established in the Edo period...',
+      zh: '京友禅起源于江户时代，以丰富的彩绘著称...'
+    },
+    images: [{ path: 'craft_images/yuzen.png' }]
+  },
+  {
+    id: 104,
+    slug: 'zoen',
+    name: { ja: '造園', en: 'Japanese Garden Design', zh: '造园' },
+    kana: 'ぞうえん',
+    summary: {
+      ja: '庭園を作り自然と調和した空間を生む技術。',
+      en: 'The art of designing gardens in harmony with nature.',
+      zh: '与自然和谐共生的庭园设计艺术。'
+    },
+    description: {
+      ja: '日本庭園は枯山水や池泉庭園など多様な形式を持つ...',
+      en: 'Japanese gardens include various styles such as dry landscapes...',
+      zh: '日本庭园包括枯山水、池泉庭园等多种形式...'
+    },
+    images: [{ path: 'craft_images/zoen.png' }]
+  },
+  {
+    id: 105,
+    slug: 'bamboo',
+    name: { ja: '京竹工芸', en: 'Kyoto Bamboo Craft', zh: '京都竹工艺' },
+    kana: 'きょうたけこうげい',
+    summary: {
+      ja: '竹を素材にした京都の伝統工芸。',
+      en: 'Traditional bamboo crafts from Kyoto.',
+      zh: '京都的传统竹工艺品。'
+    },
+    description: {
+      ja: '京竹工芸は茶道具や花器などに広く用いられる...',
+      en: 'Used for tea utensils, flower baskets, and more...',
+      zh: '广泛用于茶具、花器等...'
+    },
+    images: [{ path: 'craft_images/bamboo.png' }]
+  }
 ];
+
