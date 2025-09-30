@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { use, useState } from "react";
 import { SEED } from "@/data/crafts.seed";
@@ -28,8 +29,8 @@ export default function CraftPage({ params }: { params: Promise<{ slug: string }
 
       <div>
         <h1 className="text-2xl font-bold mb-3">{title}</h1>
-        <div className="w-full h-44 mb-3 rounded-lg overflow-hidden">
-          <img src={hero} alt={title} className="w-full h-full object-cover" />
+        <div className="relative w-full h-44 mb-3 rounded-lg overflow-hidden">
+          <Image src={hero} alt={title} fill className="object-cover" sizes="(min-width: 768px) 320px, 100vw" />
         </div>
         <p className="text-sm leading-relaxed text-neutral-700">{String(pickLang(item.summary, "ja"))}</p>
       </div>

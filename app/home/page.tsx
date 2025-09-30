@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -24,11 +25,13 @@ export default function HomePage() {
           <CardTitle className="text-lg">本日の職人実演</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
-          <div className="w-full h-40 rounded-lg overflow-hidden">
-            <img
+          <div className="relative w-full h-40 rounded-lg overflow-hidden">
+            <Image
               src="/images/candle-making-demo.png"
               alt="和蝋燭作りの職人実演"
-              className="w-full h-full object-cover"
+              fill
+              className="object-cover"
+              sizes="(min-width: 768px) 320px, 100vw"
             />
           </div>
           <Button variant="outline" onClick={() => setDemoOpen(true)}>
@@ -42,11 +45,13 @@ export default function HomePage() {
           <CardTitle className="text-lg">本日開催中のイベント</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="w-full h-48 rounded-lg overflow-hidden">
-            <img
+          <div className="relative w-full h-48 rounded-lg overflow-hidden">
+            <Image
               src="/images/tradition-meets-today.png"
               alt="Tradition Meets Today イベント"
-              className="w-full h-full object-cover bg-white"
+              fill
+              className="object-cover bg-white"
+              sizes="(min-width: 768px) 320px, 100vw"
             />
           </div>
           <div className="mt-3">

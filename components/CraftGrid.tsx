@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import type { CraftItem, Lang } from "@/types/craft";
 import { SEED } from "@/data/crafts.seed";
@@ -27,8 +28,14 @@ export default function CraftGrid({ lang = "ja" }: Props) {
             onClick={() => router.push(`/crafts/${item.slug}`)}
             className="bg-neutral-50 border border-neutral-200 rounded-lg p-2.5 hover:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:ring-offset-2 transition-colors"
           >
-            <div className="w-full h-19 mb-2 rounded overflow-hidden">
-              <img src={item.imageUrl} alt={item.name} className="w-full h-full object-cover" />
+            <div className="relative w-full h-19 mb-2 rounded overflow-hidden">
+              <Image
+                src={item.imageUrl}
+                alt={item.name}
+                fill
+                className="object-cover"
+                sizes="(min-width: 768px) 200px, 33vw"
+              />
             </div>
             <div className="text-center">
               <div className="font-semibold text-sm">{item.name}</div>
