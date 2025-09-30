@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 
-type RemotePattern = NonNullable<NextConfig["images"]>["remotePatterns"][number];
+type RemotePattern = NonNullable<
+  NonNullable<NextConfig["images"]>["remotePatterns"]
+>[number];
 
 const remotePatterns: RemotePattern[] = [];
 
