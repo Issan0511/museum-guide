@@ -49,11 +49,27 @@ export interface CraftItem {
 
 // ---------- 3) Helpers ----------
 export function getPublicUrl(path: string) {
-  return `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${path}`;
+  const baseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  if (!baseUrl || baseUrl === "undefined" || baseUrl === "null") {
+    if (path.startsWith("http://") || path.startsWith("https://")) {
+      return path;
+    }
+    if (path.startsWith("/")) {
+      return path;
+    }
+    return "/placeholder.svg";
+  }
+  return `${baseUrl}/storage/v1/object/public/${path}`;
 }
 
-export function pickLang<T extends Record<string, any>>(ml: Partial<Record<Lang, T>>, lang: Lang): T | string {
-  return ml[lang] ?? ml.ja ?? Object.values(ml)[0] ?? '';
+export function pickLang<T>(ml: Multilang<T>, lang: Lang): T | undefined {
+  if (ml[lang] !== undefined) {
+    return ml[lang];
+  }
+  if (ml.ja !== undefined) {
+    return ml.ja;
+  }
+  return Object.values(ml).find((value): value is T => value !== undefined);
 }
 
 // ---------- 4) Example item ----------

@@ -127,6 +127,7 @@ export function SelectItem({ value: itemValue, children, className, ...props }: 
     <button
       role="option"
       type="button"
+      aria-selected={ctx.value === itemValue}
       onClick={() => ctx.setValue(itemValue)}
       className={cn(
         "w-full rounded-md px-2 py-1.5 text-left text-sm hover:bg-neutral-100",
