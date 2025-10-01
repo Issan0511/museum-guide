@@ -208,6 +208,7 @@ export const SEED: CraftItem[] = [
       en: 'Used for tea utensils, flower baskets, and more...',
       zh: '广泛用于茶具、花器等...'
     },
+    details: { path: 'craft_texts/bamboo.md', format: 'md' },
     images: [{ path: 'craft_images/bamboo.png' }]
   }
 ];
