@@ -17,6 +17,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                 fill
                 className="object-contain"
                 sizes="48px"
+                unoptimized
               />
             </div>
             <div className="flex-1">

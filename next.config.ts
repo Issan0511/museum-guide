@@ -3,7 +3,6 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   images: {
-    domains: [],
     remotePatterns: [
       {
         protocol: 'https',
@@ -12,6 +11,8 @@ const nextConfig: NextConfig = {
         pathname: '/storage/v1/object/public/**',
       },
     ],
+    // ローカル画像は最適化、Supabase画像は無効化
+    unoptimized: false,
   },
 };
 

@@ -29,8 +29,15 @@ export default function CraftPage({ params }: { params: Promise<{ slug: string }
 
       <div>
         <h1 className="text-2xl font-bold mb-3">{title}</h1>
-        <div className="relative w-full h-44 mb-3 rounded-lg overflow-hidden">
-          <Image src={hero} alt={title} fill className="object-cover" sizes="(min-width: 768px) 320px, 100vw" />
+        <div className="relative w-full aspect-[16/9] mb-3 rounded-lg overflow-hidden bg-gray-100">
+          <Image 
+            src={hero} 
+            alt={title} 
+            fill 
+            className="object-cover" 
+            sizes="(max-width: 768px) 100vw, 400px"
+            unoptimized={hero.includes('supabase.co')}
+          />
         </div>
         <p className="text-sm leading-relaxed text-neutral-700">{String(pickLang(item.summary, "ja"))}</p>
       </div>

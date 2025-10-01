@@ -28,13 +28,14 @@ export default function CraftGrid({ lang = "ja" }: Props) {
             onClick={() => router.push(`/crafts/${item.slug}`)}
             className="bg-neutral-50 border border-neutral-200 rounded-lg p-2.5 hover:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:ring-offset-2 transition-colors"
           >
-            <div className="relative w-full h-19 mb-2 rounded overflow-hidden">
+            <div className="relative w-full aspect-[4/3] mb-2 rounded overflow-hidden bg-gray-100">
               <Image
                 src={item.imageUrl}
                 alt={item.name}
                 fill
                 className="object-cover"
-                sizes="(min-width: 768px) 200px, 33vw"
+                sizes="(max-width: 768px) 100px, 150px"
+                unoptimized={item.imageUrl.includes('supabase.co')}
               />
             </div>
             <div className="text-center">
