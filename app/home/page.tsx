@@ -23,23 +23,23 @@ export default function HomePage() {
     const fetchTodayDemo = async () => {
       try {
         const today = new Date().toISOString().split("T")[0];
+
         type CalendarRow = Pick<CalendarData, "template_id">;
 
         const { data: calendarRow, error } = await supabase
-          .from<CalendarRow>("calendar")
+          .from("calendar")                // ← 型はここに付けない
           .select("template_id")
           .eq("demo_date", today)
-          .maybeSingle();
+          .maybeSingle<CalendarRow>();     // ← ここに付ける
 
         if (error) {
-          // エラーの場合はnullを設定
           setTodayDemo(null);
         } else if (calendarRow) {
-          // カレンダーからテンプレートIDを取得して、対応するデモを設定
-          const demo = DEMO_TEMPLATES.find(t => t.id === calendarRow.template_id);
+          const demo = DEMO_TEMPLATES.find(
+            t => t.id === calendarRow.template_id
+          );
           setTodayDemo(demo || null);
         } else {
-          // 今日のデモがない場合はnull
           setTodayDemo(null);
         }
       } catch (error) {
@@ -51,6 +51,7 @@ export default function HomePage() {
 
     fetchTodayDemo();
   }, []);
+
 
   return (
     <div className="space-y-4">
