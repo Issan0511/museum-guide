@@ -4,7 +4,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ChatMessage } from "@/types/chat";
 
-export default function ChatbotModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+interface ChatbotModalProps {
+  open: boolean;
+  onClose: () => void;
+  craftSlug?: string;
+}
+
+export default function ChatbotModal({ open, onClose, craftSlug }: ChatbotModalProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [text, setText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -34,14 +40,15 @@ export default function ChatbotModal({ open, onClose }: { open: boolean; onClose
           messages: [...messages, userMessage].map(msg => ({
             role: msg.role,
             content: msg.content
-          }))
+          })),
+          craftSlug: craftSlug
         }),
       });
 
       if (!response.ok) {
         throw new Error('Failed to get response');
       }
-
+      console.log(response)
       const data = await response.json();
       
       const assistantMessage: ChatMessage = {
