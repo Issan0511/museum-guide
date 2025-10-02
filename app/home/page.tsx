@@ -1,18 +1,56 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import EventModal from "@/components/modals/EventModal";
 import DemoModal from "@/components/modals/DemoModal";
 import ChatbotModal from "@/components/modals/ChatbotModal";
 import CraftGrid from "@/components/CraftGrid";
+import { DEMO_TEMPLATES } from "@/data/demo.seed";
+import { supabase, type CalendarData } from "@/lib/supabase";
+import type { DemoTemplate } from "@/types/craft";
 
 export default function HomePage() {
   const [eventOpen, setEventOpen] = useState(false);
   const [demoOpen, setDemoOpen] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
+  const [todayDemo, setTodayDemo] = useState<DemoTemplate | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTodayDemo = async () => {
+      try {
+        const today = new Date().toISOString().split("T")[0];
+        type CalendarRow = Pick<CalendarData, "template_id">;
+
+        const { data: calendarRow, error } = await supabase
+          .from<CalendarRow>("calendar")
+          .select("template_id")
+          .eq("demo_date", today)
+          .maybeSingle();
+
+        if (error) {
+          // エラーの場合はnullを設定
+          setTodayDemo(null);
+        } else if (calendarRow) {
+          // カレンダーからテンプレートIDを取得して、対応するデモを設定
+          const demo = DEMO_TEMPLATES.find(t => t.id === calendarRow.template_id);
+          setTodayDemo(demo || null);
+        } else {
+          // 今日のデモがない場合はnull
+          setTodayDemo(null);
+        }
+      } catch (error) {
+        setTodayDemo(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTodayDemo();
+  }, []);
 
   return (
     <div className="space-y-4">
@@ -25,18 +63,33 @@ export default function HomePage() {
           <CardTitle className="text-lg">本日の職人実演</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
-          <div className="relative w-full h-40 rounded-lg overflow-hidden">
-            <Image
-              src="/images/candle-making-demo.png"
-              alt="和蝋燭作りの職人実演"
-              fill
-              className="object-cover"
-              sizes="(min-width: 768px) 320px, 100vw"
-            />
-          </div>
-          <Button variant="outline" onClick={() => setDemoOpen(true)}>
-            詳細を見る
-          </Button>
+          {loading ? (
+            <div className="text-center py-8">
+              <p className="text-neutral-600">読み込み中...</p>
+            </div>
+          ) : todayDemo ? (
+            <>
+              <div className="relative w-full h-40 rounded-lg overflow-hidden">
+                <Image
+                  src={todayDemo.img || "/images/candle-making-demo.png"}
+                  alt={`${todayDemo.name}の実演`}
+                  fill
+                  className="object-cover"
+                  sizes="(min-width: 768px) 320px, 100vw"
+                />
+              </div>
+              <div className="text-base font-semibold text-neutral-700 mb-2">
+                {todayDemo.name}
+              </div>
+              <Button variant="outline" onClick={() => setDemoOpen(true)}>
+                詳細を見る
+              </Button>
+            </>
+          ) : (
+            <div className="text-center py-8">
+              <p className="text-neutral-600">本日のデモはありません</p>
+            </div>
+          )}
         </CardContent>
       </Card>
 
@@ -65,7 +118,13 @@ export default function HomePage() {
       <CraftGrid lang="ja" />
 
       <EventModal open={eventOpen} onClose={() => setEventOpen(false)} />
-      <DemoModal open={demoOpen} onClose={() => setDemoOpen(false)} />
+      {todayDemo && (
+        <DemoModal 
+          open={demoOpen} 
+          onClose={() => setDemoOpen(false)} 
+          demo={todayDemo}
+        />
+      )}
       <ChatbotModal open={chatOpen} onClose={() => setChatOpen(false)} />
 
       <Button

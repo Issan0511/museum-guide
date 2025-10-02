@@ -48,7 +48,15 @@ export interface CraftItem {
   shopCollection?: string;     // optional shop collection name (e.g., "nishijin-ori")
 }
 
-// ---------- 3) Helpers ----------
+// ---------- 3) DemoTemplate ----------
+export interface DemoTemplate {
+  id: number;                  // 実演テンプレートの識別ID
+  name: string;                // 伝統工芸の名前
+  img: string;                 // storageのパス
+  description: string;         // 50字程度の一文
+}
+
+// ---------- 4) Helpers ----------
 export function getPublicUrl(path: string) {
   const baseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   if (!baseUrl || baseUrl === "undefined" || baseUrl === "null") {
@@ -102,5 +110,12 @@ export const CraftItemZ = z.object({
   images: z.array(ImageAssetZ).min(1),
   youtubeId: z.string().min(1).optional(),
   shopCollection: z.string().min(1).optional()
+});
+
+export const DemoTemplateZ = z.object({
+  id: z.number().int().nonnegative(),
+  name: z.string().min(1),
+  img: z.string().min(1),
+  description: z.string().min(1).max(50)
 });
 
