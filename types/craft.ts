@@ -44,7 +44,8 @@ export interface CraftItem {
   details?: TextAsset;
 
   images: ImageAsset[];        // gallery, first item may serve as hero
-  videoUrl?: string;           // optional external video
+  youtubeId?: string;          // optional YouTube video ID (e.g., "Y7_oVhzEpLg")
+  shopCollection?: string;     // optional shop collection name (e.g., "nishijin-ori")
 }
 
 // ---------- 3) Helpers ----------
@@ -99,6 +100,7 @@ export const CraftItemZ = z.object({
   description: ML,
   details: TextAssetZ.optional(),
   images: z.array(ImageAssetZ).min(1),
-  videoUrl: z.string().url().optional()
+  youtubeId: z.string().min(1).optional(),
+  shopCollection: z.string().min(1).optional()
 });
 

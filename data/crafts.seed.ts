@@ -16,7 +16,8 @@ export const SEED: CraftItem[] = [
       en: 'Nishijin weaving is characterized by intricate patterns using pre-dyed threads...',
       zh: '西阵织物的特点是使用预染线创造复杂的图案...'
     },
-    videoUrl: 'https://youtu.be/Y7_oVhzEpLg?si=PeoO_-PjOsWTMM1W',
+    youtubeId: 'Y7_oVhzEpLg',
+    shopCollection: 'nishijin-ori',
     images: [{ path: 'craft_images/nishijin.png' }]
   },
   {
@@ -34,7 +35,7 @@ export const SEED: CraftItem[] = [
       en: 'This technique creates complex patterns by binding sections of fabric...',
       zh: '通过不同的捆扎方式创造复杂的图案...'
     },
-    videoUrl: 'https://youtu.be/FAyPDLVqZ7M?si=T9z_3Z8S_IsJWv7m',
+    youtubeId: 'FAyPDLVqZ7M',
     images: [{ path: 'craft_images/kanoko.png' }]
   },
   {
@@ -52,7 +53,8 @@ export const SEED: CraftItem[] = [
       en: 'Kyoto Yuzen was established in the Edo period...',
       zh: '京友禅起源于江户时代，以丰富的彩绘著称...'
     },
-    videoUrl: 'https://youtu.be/K20BwqIHAdE?si=bX2u_hSbaZt8S6XA',
+    youtubeId: 'K20BwqIHAdE',
+    shopCollection: 'fabric-dyeing',
     images: [{ path: 'craft_images/yuzen.png' }]
   },
   {
@@ -87,7 +89,8 @@ export const SEED: CraftItem[] = [
       en: 'Used for tea utensils, flower baskets, and more...',
       zh: '广泛用于茶具、花器等...'
     },
-    videoUrl: 'https://youtu.be/GH6relToNIw?si=QGerPBBxn6G4A6WE',
+    youtubeId: 'GH6relToNIw',
+    shopCollection: 'bamboo-crafts',
     details: { path: 'craft_texts/bamboo.md', format: 'md' },
     images: [{ path: 'craft_images/bamboo.png' }]
   }

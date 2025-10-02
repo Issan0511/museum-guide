@@ -11,13 +11,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import ChatbotModal from "@/components/modals/ChatbotModal";
 
-// YouTube URLから動画IDを抽出する関数
-function extractYouTubeId(url: string): string {
-  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-  const match = url.match(regExp);
-  return match && match[2].length === 11 ? match[2] : '';
-}
-
 export default function CraftPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);
   const item = (SEED as CraftItem[]).find((craft) => craft.slug === slug);
@@ -48,7 +41,7 @@ export default function CraftPage({ params }: { params: Promise<{ slug: string }
         <p className="text-sm leading-relaxed text-neutral-700">{String(pickLang(item.summary, "ja"))}</p>
       </div>
 
-      {item.videoUrl && (
+      {item.youtubeId && (
         <Card className="bg-neutral-50 border-neutral-200 shadow-sm">
           <CardHeader className="pb-3">
             <CardTitle className="text-base font-semibold">動画</CardTitle>
@@ -57,12 +50,70 @@ export default function CraftPage({ params }: { params: Promise<{ slug: string }
             <div className="relative w-full pt-[56.25%] rounded-lg overflow-hidden">
               <iframe
                 className="absolute inset-0 w-full h-full rounded-lg"
-                src={`https://www.youtube.com/embed/${extractYouTubeId(item.videoUrl)}`}
+                src={`https://www.youtube.com/embed/${item.youtubeId}`}
                 title="YouTube video player"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowFullScreen
               />
             </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {item.shopCollection ? (
+        <Card className="bg-white border-neutral-200 shadow-sm">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base font-semibold">ショップ</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-neutral-600 mb-4">
+              この工芸品をオンラインショップで購入できます
+            </p>
+            <a 
+              href={`https://mocad-shop.com/collections/${item.shopCollection}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block"
+              aria-label="MOCADショップでこの工芸品を見る"
+            >
+              <div className="relative w-full h-32 mx-auto hover:opacity-80 transition-opacity cursor-pointer">
+                <Image
+                  src="/images/mocad_shop_logo.png"
+                  alt="MOCAD Shop"
+                  fill
+                  className="object-contain"
+                  sizes="100vw"
+                />
+              </div>
+            </a>
+          </CardContent>
+        </Card>
+      ) : (
+        <Card className="bg-white border-neutral-200 shadow-sm">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base font-semibold">ショップ</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-neutral-600 mb-4">
+              他の工芸品をオンラインショップで購入できます
+            </p>
+            <a 
+              href="https://mocad-shop.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block"
+              aria-label="MOCADショップで他の工芸品を見る"
+            >
+              <div className="relative w-full h-32 mx-auto hover:opacity-80 transition-opacity cursor-pointer">
+                <Image
+                  src="/images/mocad_shop_logo.png"
+                  alt="MOCAD Shop"
+                  fill
+                  className="object-contain"
+                  sizes="100vw"
+                />
+              </div>
+            </a>
           </CardContent>
         </Card>
       )}
