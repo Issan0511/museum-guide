@@ -12,7 +12,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <div className="max-w-sm mx-auto flex items-center gap-3 px-4 py-3 min-h-[68px]">
             <div className="relative w-12 h-8 flex items-center justify-center">
               <Image
-                src="/images/museum-logo.png"
+                src="/images/museum_logo.png"
                 alt="京都伝統産業ミュージアム ロゴ"
                 fill
                 className="object-contain"

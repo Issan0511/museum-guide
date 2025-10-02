@@ -9,8 +9,14 @@ import { pickLang } from "@/types/craft";
 import { getPublicUrl } from "@/lib/supabasePublic";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import AudioPlayer from "@/components/AudioPlayer";
 import ChatbotModal from "@/components/modals/ChatbotModal";
+
+// YouTube URLから動画IDを抽出する関数
+function extractYouTubeId(url: string): string {
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+  const match = url.match(regExp);
+  return match && match[2].length === 11 ? match[2] : '';
+}
 
 export default function CraftPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);
@@ -42,31 +48,24 @@ export default function CraftPage({ params }: { params: Promise<{ slug: string }
         <p className="text-sm leading-relaxed text-neutral-700">{String(pickLang(item.summary, "ja"))}</p>
       </div>
 
-      <Card className="bg-neutral-50 border-neutral-200 shadow-sm">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-base font-semibold">音声ガイド</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <AudioPlayer src="/audio/nishijin-guide.mp3" downloadName="nishijin-guide.mp3" />
-        </CardContent>
-      </Card>
-
-      <Card className="bg-neutral-50 border-neutral-200 shadow-sm">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-base font-semibold">動画</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="relative w-full pt-[56.25%] rounded-lg overflow-hidden">
-            <iframe
-              className="absolute inset-0 w-full h-full rounded-lg"
-              src="https://www.youtube.com/embed/Y7_oVhzEpLg"
-              title="YouTube video player"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
-            />
-          </div>
-        </CardContent>
-      </Card>
+      {item.videoUrl && (
+        <Card className="bg-neutral-50 border-neutral-200 shadow-sm">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base font-semibold">動画</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="relative w-full pt-[56.25%] rounded-lg overflow-hidden">
+              <iframe
+                className="absolute inset-0 w-full h-full rounded-lg"
+                src={`https://www.youtube.com/embed/${extractYouTubeId(item.videoUrl)}`}
+                title="YouTube video player"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              />
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       <Button
         className="fixed right-4 bottom-4 w-14 h-14 rounded-full bg-neutral-900 hover:bg-neutral-800 shadow-lg z-50"
