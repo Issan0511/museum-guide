@@ -70,7 +70,7 @@ export default function HomePage() {
             </div>
           ) : todayDemo ? (
             <>
-              <div className="relative w-full h-40 rounded-lg overflow-hidden">
+              <div className="relative w-full h-60 rounded-lg overflow-hidden">
                 <Image
                   src={todayDemo.img || "/images/candle-making-demo.png"}
                   alt={`${todayDemo.name}の実演`}
