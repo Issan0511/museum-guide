@@ -1,6 +1,6 @@
-import type { Lang } from "@/types/craft";
+import type { Lang } from "@/types/types";
 
-export { pickLang } from "@/types/craft";
+export { pickLang } from "@/types/types";
 
 export function ensureLang<T>(value: T | string): string {
   return typeof value === "string" ? value : String(value);

@@ -1,4 +1,4 @@
-import { DemoTemplate } from "@/types/craft";
+import { DemoTemplate } from "@/types/types";
 
 export const DEMO_TEMPLATES: DemoTemplate[] = [
   {

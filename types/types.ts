@@ -128,3 +128,60 @@ export interface ChatResponse {
 export interface ChatError {
   error: string;
 }
+
+// ---------- 7) User types ----------
+
+/**
+ * Age group representation
+ * Maps age ranges to their representative values
+ */
+export type AgeGroup = 9 | 16 | 20 | 30 | 40 | 50 | 60 | 70 | 80;
+
+/**
+ * Language preference (same as Lang but kept separate for user context)
+ */
+export type UserLanguage = 'ja' | 'en' | 'zh';
+
+/**
+ * User profile/preferences
+ */
+export interface UserProfile {
+  age: AgeGroup;
+  language: UserLanguage;
+}
+
+/**
+ * Helper to get age group from actual age
+ */
+export function getAgeGroup(age: number): AgeGroup {
+  if (age < 12) return 9;
+  if (age < 18) return 16;
+  if (age < 30) return 20;
+  if (age < 40) return 30;
+  if (age < 50) return 40;
+  if (age < 60) return 50;
+  if (age < 70) return 60;
+  if (age < 80) return 70;
+  return 80;
+}
+
+// ---------- 8) Zod validation for User types ----------
+
+export const AgeGroupZ = z.union([
+  z.literal(9),
+  z.literal(16),
+  z.literal(20),
+  z.literal(30),
+  z.literal(40),
+  z.literal(50),
+  z.literal(60),
+  z.literal(70),
+  z.literal(80)
+]);
+
+export const UserLanguageZ = z.enum(['ja', 'en', 'zh']);
+
+export const UserProfileZ = z.object({
+  age: AgeGroupZ,
+  language: UserLanguageZ
+});

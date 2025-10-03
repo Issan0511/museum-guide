@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import type { Event } from "@/types/craft";
+import type { Event } from "@/types/types";
 
 export default function EventModal({ open, onClose, event }: { open: boolean; onClose: () => void; event: Event }) {
   if (!open) return null;
@@ -17,12 +17,17 @@ export default function EventModal({ open, onClose, event }: { open: boolean; on
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40">
-      <Card className="w-full max-w-md max-h-[80vh] overflow-y-auto">
-        <CardHeader className="flex-row items-center justify-between space-y-0 pb-3 border-b">
+      <Card className="w-full max-w-md max-h-[80vh] overflow-y-auto relative">
+        <Button 
+          size="sm" 
+          variant="outline" 
+          className="absolute top-3 right-3 h-8 w-8 p-0 bg-white hover:bg-neutral-100 z-10" 
+          onClick={onClose}
+        >
+          ×
+        </Button>
+        <CardHeader className="pb-3 border-b">
           <CardTitle className="text-base">{event.name}</CardTitle>
-          <Button size="sm" variant="outline" className="h-8 w-8 p-0 bg-transparent" onClick={onClose}>
-            ×
-          </Button>
         </CardHeader>
         <CardContent className="p-4 space-y-3">
           <div className="relative w-full h-96 rounded-lg overflow-hidden">

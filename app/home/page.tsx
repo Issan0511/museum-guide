@@ -11,14 +11,15 @@ import CraftGrid from "@/components/CraftGrid";
 import { DEMO_TEMPLATES } from "@/data/demo.seed";
 import { EVENTS } from "@/data/events.seed";
 import { supabase, type CalendarData } from "@/lib/supabase";
-import type { DemoTemplate, Event } from "@/types/craft";
+import type { DemoTemplate, Event } from "@/types/types";
 
 export default function HomePage() {
   const [eventOpen, setEventOpen] = useState(false);
   const [demoOpen, setDemoOpen] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
   const [todayDemo, setTodayDemo] = useState<DemoTemplate | null>(null);
-  const [todayEvent, setTodayEvent] = useState<Event | null>(null);
+  const [todayEvents, setTodayEvents] = useState<Event[]>([]);
+  const [currentEventIndex, setCurrentEventIndex] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -48,15 +49,16 @@ export default function HomePage() {
         }
 
         // イベントデータの取得（開催期間中のもの）
-        const currentEvent = EVENTS.find(event => {
+        const currentEvents = EVENTS.filter(event => {
           const start = new Date(event.startDate);
           const end = new Date(event.endDate);
           return today >= start && today <= end;
         });
-        setTodayEvent(currentEvent || null);
+        setTodayEvents(currentEvents);
+        setCurrentEventIndex(0);
       } catch (error) {
         setTodayDemo(null);
-        setTodayEvent(null);
+        setTodayEvents([]);
       } finally {
         setLoading(false);
       }
@@ -116,19 +118,48 @@ export default function HomePage() {
             <div className="text-center py-8">
               <p className="text-neutral-600">読み込み中...</p>
             </div>
-          ) : todayEvent ? (
+          ) : todayEvents.length > 0 ? (
             <>
               <div className="relative w-full h-96 rounded-lg overflow-hidden">
                 <Image
-                  src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/event_images/${todayEvent.id}.png`}
-                  alt={todayEvent.name}
+                  src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/event_images/${todayEvents[currentEventIndex].id}.png`}
+                  alt={todayEvents[currentEventIndex].name}
                   fill
                   className="object-cover bg-white"
                   sizes="(min-width: 768px) 320px, 100vw"
                 />
+                {todayEvents.length > 1 && (
+                  <>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setCurrentEventIndex(prev => prev - 1)}
+                      disabled={currentEventIndex === 0}
+                      className="absolute left-2 top-1/2 -translate-y-1/2 h-10 w-10 p-0 bg-white/90 hover:bg-white shadow-lg"
+                    >
+                      ←
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setCurrentEventIndex(prev => prev + 1)}
+                      disabled={currentEventIndex === todayEvents.length - 1}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 h-10 w-10 p-0 bg-white/90 hover:bg-white shadow-lg"
+                    >
+                      →
+                    </Button>
+                  </>
+                )}
               </div>
-              <div className="text-base font-semibold text-neutral-700 mb-2">
-                {todayEvent.name}
+              <div className="flex items-center justify-between">
+                <div className="text-base font-semibold text-neutral-700">
+                  {todayEvents[currentEventIndex].name}
+                </div>
+                {todayEvents.length > 1 && (
+                  <div className="text-sm text-neutral-600">
+                    {currentEventIndex + 1} / {todayEvents.length}
+                  </div>
+                )}
               </div>
               <Button variant="outline" onClick={() => setEventOpen(true)}>
                 詳細を見る
@@ -144,11 +175,11 @@ export default function HomePage() {
 
       <CraftGrid lang="ja" />
 
-      {todayEvent && (
+      {todayEvents.length > 0 && (
         <EventModal 
           open={eventOpen} 
           onClose={() => setEventOpen(false)}
-          event={todayEvent}
+          event={todayEvents[currentEventIndex]}
         />
       )}
       {todayDemo && (

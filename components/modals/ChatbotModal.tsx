@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ChatMessage } from "@/types/chat";
+import { ChatMessage } from "@/types/types";
 
 export default function ChatbotModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -73,12 +73,17 @@ export default function ChatbotModal({ open, onClose }: { open: boolean; onClose
 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-3 bg-black/40">
-      <Card className="w-full max-w-md max-h-[80vh] flex flex-col">
-        <CardHeader className="flex-row items-center justify-between space-y-0 pb-3 border-b">
+      <Card className="w-full max-w-md max-h-[80vh] flex flex-col relative">
+        <Button 
+          size="sm" 
+          variant="outline" 
+          className="absolute top-3 right-3 h-8 w-8 p-0 bg-white hover:bg-neutral-100 z-10" 
+          onClick={onClose}
+        >
+          ×
+        </Button>
+        <CardHeader className="pb-3 border-b">
           <CardTitle className="text-base">博物館案内チャット</CardTitle>
-          <Button size="sm" variant="outline" className="h-8 w-8 p-0 bg-transparent" onClick={onClose}>
-            ×
-          </Button>
         </CardHeader>
         <CardContent className="flex-1 p-3 bg-neutral-50 overflow-auto">
           {messages.length === 0 ? (

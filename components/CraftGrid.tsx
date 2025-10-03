@@ -2,9 +2,9 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import type { CraftItem, Lang } from "@/types/craft";
+import type { CraftItem, Lang } from "@/types/types";
 import { SEED } from "@/data/crafts.seed";
-import { pickLang } from "@/types/craft";
+import { pickLang } from "@/types/types";
 import { getPublicUrl } from "@/lib/supabasePublic";
 
 type Props = { lang?: Lang };

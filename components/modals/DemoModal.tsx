@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { DemoTemplate } from "@/types/craft";
+import { DemoTemplate } from "@/types/types";
 
 export default function DemoModal({ 
   open, 
@@ -17,12 +17,17 @@ export default function DemoModal({
   
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40">
-      <Card className="w-full max-w-md">
-        <CardHeader className="flex items-center justify-between space-y-0 pb-3 border-b">
+      <Card className="w-full max-w-md relative">
+        <Button 
+          size="sm" 
+          variant="outline" 
+          className="absolute top-3 right-3 h-8 w-8 p-0 bg-white hover:bg-neutral-100 z-10" 
+          onClick={onClose}
+        >
+          ×
+        </Button>
+        <CardHeader className="pb-3 border-b">
           <CardTitle className="text-base">職人実演</CardTitle>
-          <Button size="sm" variant="outline" className="h-8 w-8 p-0 bg-transparent ml-auto" onClick={onClose}>
-            ×
-          </Button>
         </CardHeader>
         <CardContent className="p-4 space-y-4">
           {demo ? (

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
+import Providers from "./providers";
 import "./globals.css";
 
 export const metadata = { title: "Kyoto Museum" };
@@ -26,7 +27,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             </div>
           </div>
         </header>
-        <main className="pt-20 pb-10 px-4 max-w-sm mx-auto">{children}</main>
+        <Providers>
+          <main className="pt-20 pb-10 px-4 max-w-sm mx-auto">{children}</main>
+        </Providers>
       </body>
     </html>
   );

@@ -1,4 +1,4 @@
-import { CraftItem } from "@/types/craft";
+import { CraftItem } from "@/types/types";
 
 export const SEED: CraftItem[] = [
   {
