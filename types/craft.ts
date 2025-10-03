@@ -55,7 +55,17 @@ export interface DemoTemplate {
   description: string;         // 50字程度の一文
 }
 
-// ---------- 4) Helpers ----------
+// ---------- 4) EventTemplate ----------
+
+export interface Event {
+  id: number;
+  name: string;
+  startDate: Date;
+  endDate: Date;
+  detail: string;
+}
+
+// ---------- 5) Helpers ----------
 
 export function pickLang<T>(ml: Multilang<T>, lang: Lang): T | undefined {
   if (ml[lang] !== undefined) {

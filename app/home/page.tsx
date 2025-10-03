@@ -9,27 +9,31 @@ import DemoModal from "@/components/modals/DemoModal";
 import ChatbotModal from "@/components/modals/ChatbotModal";
 import CraftGrid from "@/components/CraftGrid";
 import { DEMO_TEMPLATES } from "@/data/demo.seed";
+import { EVENTS } from "@/data/events.seed";
 import { supabase, type CalendarData } from "@/lib/supabase";
-import type { DemoTemplate } from "@/types/craft";
+import type { DemoTemplate, Event } from "@/types/craft";
 
 export default function HomePage() {
   const [eventOpen, setEventOpen] = useState(false);
   const [demoOpen, setDemoOpen] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
   const [todayDemo, setTodayDemo] = useState<DemoTemplate | null>(null);
+  const [todayEvent, setTodayEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchTodayDemo = async () => {
+    const fetchTodayData = async () => {
       try {
-        const today = new Date().toISOString().split("T")[0];
+        const today = new Date();
+        const todayStr = today.toISOString().split("T")[0];
 
+        // デモデータの取得
         type CalendarRow = Pick<CalendarData, "template_id">;
 
         const { data: calendarRow, error } = await supabase
           .from("calendar")                // ← 型はここに付けない
           .select("template_id")
-          .eq("demo_date", today)
+          .eq("demo_date", todayStr)
           .maybeSingle<CalendarRow>();     // ← ここに付ける
 
         if (error) {
@@ -42,14 +46,23 @@ export default function HomePage() {
         } else {
           setTodayDemo(null);
         }
+
+        // イベントデータの取得（開催期間中のもの）
+        const currentEvent = EVENTS.find(event => {
+          const start = new Date(event.startDate);
+          const end = new Date(event.endDate);
+          return today >= start && today <= end;
+        });
+        setTodayEvent(currentEvent || null);
       } catch (error) {
         setTodayDemo(null);
+        setTodayEvent(null);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchTodayDemo();
+    fetchTodayData();
   }, []);
 
 
@@ -98,27 +111,46 @@ export default function HomePage() {
         <CardHeader className="pb-3">
           <CardTitle className="text-lg">本日開催中のイベント</CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="relative w-full h-48 rounded-lg overflow-hidden">
-            <Image
-              src="/images/tradition-meets-today.png"
-              alt="Tradition Meets Today イベント"
-              fill
-              className="object-cover bg-white"
-              sizes="(min-width: 768px) 320px, 100vw"
-            />
-          </div>
-          <div className="mt-3">
-            <Button variant="outline" onClick={() => setEventOpen(true)}>
-              詳細を見る
-            </Button>
-          </div>
+        <CardContent className="space-y-3">
+          {loading ? (
+            <div className="text-center py-8">
+              <p className="text-neutral-600">読み込み中...</p>
+            </div>
+          ) : todayEvent ? (
+            <>
+              <div className="relative w-full h-96 rounded-lg overflow-hidden">
+                <Image
+                  src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/event_images/${todayEvent.id}.png`}
+                  alt={todayEvent.name}
+                  fill
+                  className="object-cover bg-white"
+                  sizes="(min-width: 768px) 320px, 100vw"
+                />
+              </div>
+              <div className="text-base font-semibold text-neutral-700 mb-2">
+                {todayEvent.name}
+              </div>
+              <Button variant="outline" onClick={() => setEventOpen(true)}>
+                詳細を見る
+              </Button>
+            </>
+          ) : (
+            <div className="text-center py-8">
+              <p className="text-neutral-600">本日開催中のイベントはありません</p>
+            </div>
+          )}
         </CardContent>
       </Card>
 
       <CraftGrid lang="ja" />
 
-      <EventModal open={eventOpen} onClose={() => setEventOpen(false)} />
+      {todayEvent && (
+        <EventModal 
+          open={eventOpen} 
+          onClose={() => setEventOpen(false)}
+          event={todayEvent}
+        />
+      )}
       {todayDemo && (
         <DemoModal 
           open={demoOpen} 
