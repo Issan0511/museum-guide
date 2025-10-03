@@ -2,7 +2,7 @@ import { CraftItem } from "@/types/craft";
 
 export const SEED: CraftItem[] = [
   {
-    id: 101,
+    id: 1,
     slug: 'nishijin',
     name: { ja: '西陣織', en: 'Nishijin Weaving', zh: '西阵织物' },
     kana: 'にしじんおり',
@@ -18,10 +18,9 @@ export const SEED: CraftItem[] = [
     },
     youtubeId: 'Y7_oVhzEpLg',
     shopCollection: 'nishijin-ori',
-    images: [{ path: 'craft_images/nishijin.png' }]
   },
   {
-    id: 102,
+    id: 2,
     slug: 'kanoko',
     name: { ja: '京鹿の子絞', en: 'Kyoto Kanoko Shibori', zh: '京鹿子绞染' },
     kana: 'きょうかのこしぼり',
@@ -36,10 +35,9 @@ export const SEED: CraftItem[] = [
       zh: '通过不同的捆扎方式创造复杂的图案...'
     },
     youtubeId: 'FAyPDLVqZ7M',
-    images: [{ path: 'craft_images/kanoko.png' }]
   },
   {
-    id: 103,
+    id: 3,
     slug: 'yuzen',
     name: { ja: '京友禅', en: 'Kyoto Yuzen Dyeing', zh: '京友禅染' },
     kana: 'きょうゆうぜん',
@@ -55,10 +53,9 @@ export const SEED: CraftItem[] = [
     },
     youtubeId: 'K20BwqIHAdE',
     shopCollection: 'fabric-dyeing',
-    images: [{ path: 'craft_images/yuzen.png' }]
   },
   {
-    id: 104,
+    id: 31,
     slug: 'zoen',
     name: { ja: '造園', en: 'Japanese Garden Design', zh: '造园' },
     kana: 'ぞうえん',
@@ -72,10 +69,10 @@ export const SEED: CraftItem[] = [
       en: 'Japanese gardens include various styles such as dry landscapes...',
       zh: '日本庭园包括枯山水、池泉庭园等多种形式...'
     },
-    images: [{ path: 'craft_images/zoen.png' }]
+
   },
   {
-    id: 105,
+    id: 32,
     slug: 'bamboo',
     name: { ja: '京竹工芸', en: 'Kyoto Bamboo Craft', zh: '京都竹工艺' },
     kana: 'きょうたけこうげい',
@@ -92,6 +89,5 @@ export const SEED: CraftItem[] = [
     youtubeId: 'GH6relToNIw',
     shopCollection: 'bamboo-crafts',
     details: { path: 'craft_texts/bamboo.md', format: 'md' },
-    images: [{ path: 'craft_images/bamboo.png' }]
   }
 ];

@@ -3,7 +3,7 @@
 Minimal Next.js App Router project with TypeScript for showcasing traditional crafts.
 
 ## What is included
-- App Router pages for `/lang`, `/home`, and `/crafts/[slug]`
+- App Router pages for `/lang`, `/home`, and `/crafts/[id]`
 - Cookie driven user preference stored as `ux_pref`
 - Three placeholder modals (`Event`, `Demo`, `Chatbot`) implemented with `<dialog>`
 - Supabase Storage helper that resolves public URLs from stored paths
@@ -12,7 +12,7 @@ Minimal Next.js App Router project with TypeScript for showcasing traditional cr
 ## Project structure
 ```
 app/
-  crafts/[slug]/page.tsx
+  crafts/[id]/page.tsx
   home/page.tsx
   lang/actions.ts
   lang/page.tsx

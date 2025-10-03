@@ -43,7 +43,6 @@ export interface CraftItem {
    */
   details?: TextAsset;
 
-  images: ImageAsset[];        // gallery, first item may serve as hero
   youtubeId?: string;          // optional YouTube video ID (e.g., "Y7_oVhzEpLg")
   shopCollection?: string;     // optional shop collection name (e.g., "nishijin-ori")
 }
@@ -57,19 +56,6 @@ export interface DemoTemplate {
 }
 
 // ---------- 4) Helpers ----------
-export function getPublicUrl(path: string) {
-  const baseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  if (!baseUrl || baseUrl === "undefined" || baseUrl === "null") {
-    if (path.startsWith("http://") || path.startsWith("https://")) {
-      return path;
-    }
-    if (path.startsWith("/")) {
-      return path;
-    }
-    return "/placeholder.svg";
-  }
-  return `${baseUrl}/storage/v1/object/public/${path}`;
-}
 
 export function pickLang<T>(ml: Multilang<T>, lang: Lang): T | undefined {
   if (ml[lang] !== undefined) {
@@ -107,7 +93,6 @@ export const CraftItemZ = z.object({
   summary: ML,
   description: ML,
   details: TextAssetZ.optional(),
-  images: z.array(ImageAssetZ).min(1),
   youtubeId: z.string().min(1).optional(),
   shopCollection: z.string().min(1).optional()
 });

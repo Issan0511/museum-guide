@@ -14,8 +14,8 @@ export default function CraftGrid({ lang = "ja" }: Props) {
   const items = (SEED as CraftItem[]).map((craft) => ({
     name: String(pickLang(craft.name, lang)),
     reading: craft.kana ?? "",
-    slug: craft.slug,
-    imageUrl: craft.images?.[0]?.path ? getPublicUrl(craft.images[0].path) : "/placeholder.svg"
+    id: craft.id,
+    imageUrl: getPublicUrl("craft_images/" + craft.id+".png")
   }));
 
   return (
@@ -24,8 +24,8 @@ export default function CraftGrid({ lang = "ja" }: Props) {
       <div className="grid grid-cols-3 gap-3">
         {items.map((item) => (
           <button
-            key={item.slug}
-            onClick={() => router.push(`/crafts/${item.slug}`)}
+            key={item.id}
+            onClick={() => router.push(`/crafts/${item.id}`)}
             className="bg-neutral-50 border border-neutral-200 rounded-lg p-2.5 hover:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:ring-offset-2 transition-colors"
           >
             <div className="relative w-full aspect-[4/3] mb-2 rounded overflow-hidden bg-gray-100">

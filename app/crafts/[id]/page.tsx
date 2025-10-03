@@ -11,13 +11,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import ChatbotModal from "@/components/modals/ChatbotModal";
 
-export default function CraftPage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = use(params);
-  const item = (SEED as CraftItem[]).find((craft) => craft.slug === slug);
+export default function CraftPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
+  const item = (SEED as CraftItem[]).find((craft) => craft.id === parseInt(id));
   const [chatOpen, setChatOpen] = useState(false);
+  
   if (!item) return notFound();
 
-  const hero = item.images?.[0]?.path ? getPublicUrl(item.images[0].path) : "/placeholder.svg";
+  const hero =  getPublicUrl("craft_images/" + item.id+".png");
   const title = String(pickLang(item.name, "ja"));
 
   return (
@@ -69,6 +70,7 @@ export default function CraftPage({ params }: { params: Promise<{ slug: string }
             <p className="text-sm text-neutral-600 mb-4">
               この工芸品をオンラインショップで購入できます
             </p>
+            <p className="text-sm text-neutral-500">下のアイコンをタップ↓</p>
             <a 
               href={`https://mocad-shop.com/collections/${item.shopCollection}`}
               target="_blank"
