@@ -11,7 +11,6 @@ import CraftGrid from "@/components/CraftGrid";
 import { supabase, type CalendarData } from "@/lib/supabase";
 import { getPublicUrl } from "@/lib/supabasePublic";
 import type { DemoTemplate, Event } from "@/types/types";
-import { getPublicUrl } from "@/lib/supabasePublic";
 import { mapDemoTemplateRow, mapEventRow, type DemoTemplateRow, type EventRow } from "@/lib/supabaseMappers";
 
 export default function HomePage() {
