@@ -62,7 +62,6 @@ export type DemoTemplateRow = {
   name_ja: string | null;
   name_en: string | null;
   name_zh: string | null;
-  img: string | null;
   description_ja: string | null;
   description_en: string | null;
   description_zh: string | null;
@@ -72,7 +71,6 @@ export function mapDemoTemplateRow(row: DemoTemplateRow): DemoTemplate {
   return {
     id: row.id,
     name: row.name_ja ?? row.name_en ?? row.name_zh ?? "",
-    img: row.img ? getPublicUrl(row.img) : "/images/candle-making-demo.png",
     description: row.description_ja ?? row.description_en ?? row.description_zh ?? "",
   };
 }
