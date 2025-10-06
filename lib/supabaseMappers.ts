@@ -1,5 +1,4 @@
 import type { CraftItem, DemoTemplate, Event, Multilang } from "@/types/types";
-import { getPublicUrl } from "@/lib/supabasePublic";
 
 export type CraftRow = {
   id: number;

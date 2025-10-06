@@ -81,9 +81,9 @@ ${md}`;
           if (delta) send(delta);
         }
         send("[DONE]");
-      } catch (e: any) {
+      } catch (e: unknown) {
         console.error("Chat error:", e);
-        send(`[ERROR] ${e?.message ?? "unknown error"}`);
+        send(`[ERROR] ${e instanceof Error ? e.message : "unknown error"}`);
       } finally {
         controller.close();
       }
