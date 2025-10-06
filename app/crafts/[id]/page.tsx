@@ -2,24 +2,89 @@
 
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { use, useState } from "react";
-import { SEED } from "@/data/crafts.seed";
+import { use, useEffect, useMemo, useState } from "react";
 import type { CraftItem } from "@/types/types";
 import { pickLang } from "@/types/types";
 import { getPublicUrl } from "@/lib/supabasePublic";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import ChatbotModal from "@/components/modals/ChatbotModal";
+import { supabase } from "@/lib/supabase";
+import { mapCraftRow, type CraftRow } from "@/lib/supabaseMappers";
 
 export default function CraftPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
-  const item = (SEED as CraftItem[]).find((craft) => craft.id === parseInt(id));
+  const numericId = Number(id);
+  const [item, setItem] = useState<CraftItem | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [missing, setMissing] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
-  
-  if (!item) return notFound();
 
-  const hero =  getPublicUrl("craft_images/" + item.id+".png");
-  const title = String(pickLang(item.name, "ja"));
+  useEffect(() => {
+    if (Number.isNaN(numericId)) {
+      setMissing(true);
+      setLoading(false);
+      return;
+    }
+
+    let active = true;
+
+    const fetchCraft = async () => {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from("crafts")
+        .select("*")
+        .eq("id", numericId)
+        .maybeSingle();
+
+      if (!active) return;
+
+      if (error || !data) {
+        console.error("Failed to fetch craft from Supabase", error);
+        setMissing(true);
+        setItem(null);
+      } else {
+        setItem(mapCraftRow(data as CraftRow));
+        setMissing(false);
+      }
+      setLoading(false);
+    };
+
+    fetchCraft();
+
+    return () => {
+      active = false;
+    };
+  }, [numericId]);
+
+  const hero = useMemo(() => {
+    if (!item) return "/placeholder.svg";
+    return getPublicUrl(`craft_images/${item.id}.png`);
+  }, [item]);
+
+  const title = useMemo(() => {
+    if (!item) return "";
+    return pickLang(item.name, "ja") ?? "";
+  }, [item]);
+
+  if (!loading && missing) {
+    return notFound();
+  }
+
+  if (loading || !item) {
+    return (
+      <div className="space-y-6">
+        <button onClick={() => history.back()} className="text-sm text-neutral-700 hover:text-neutral-900 mb-3">
+          ← 工芸一覧へ戻る
+        </button>
+        <div className="space-y-3">
+          <div className="w-full aspect-[16/9] bg-neutral-200 rounded-lg animate-pulse" />
+          <div className="h-6 bg-neutral-200 rounded w-1/2 animate-pulse" />
+          <div className="h-24 bg-neutral-100 rounded animate-pulse" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -30,16 +95,16 @@ export default function CraftPage({ params }: { params: Promise<{ id: string }> 
       <div>
         <h1 className="text-2xl font-bold mb-3">{title}</h1>
         <div className="relative w-full aspect-[16/9] mb-3 rounded-lg overflow-hidden bg-gray-100">
-          <Image 
-            src={hero} 
-            alt={title} 
-            fill 
-            className="object-cover" 
-            sizes="(max-width: 768px) 100vw, 400px"
-            unoptimized={hero.includes('supabase.co')}
-          />
-        </div>
-        <p className="text-sm leading-relaxed text-neutral-700">{String(pickLang(item.summary, "ja"))}</p>
+            <Image
+              src={hero}
+              alt={title}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 400px"
+              unoptimized={hero.includes("supabase.co")}
+            />
+          </div>
+          <p className="text-sm leading-relaxed text-neutral-700">{pickLang(item.summary, "ja") ?? ""}</p>
       </div>
 
       {item.youtubeId && (
