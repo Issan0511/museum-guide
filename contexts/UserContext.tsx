@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import type { UserProfile, AgeGroup, UserLanguage } from "@/types/types";
+import type { UserProfile } from "@/types/types";
 
 interface UserContextType {
   userProfile: UserProfile | null;

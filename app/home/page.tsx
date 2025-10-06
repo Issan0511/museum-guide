@@ -8,11 +8,11 @@ import EventModal from "@/components/modals/EventModal";
 import DemoModal from "@/components/modals/DemoModal";
 import ChatbotModal from "@/components/modals/ChatbotModal";
 import CraftGrid from "@/components/CraftGrid";
-import { DEMO_TEMPLATES } from "@/data/demo.seed";
-import { EVENTS } from "@/data/events.seed";
 import { supabase, type CalendarData } from "@/lib/supabase";
 import { getPublicUrl } from "@/lib/supabasePublic";
 import type { DemoTemplate, Event } from "@/types/types";
+import { getPublicUrl } from "@/lib/supabasePublic";
+import { mapDemoTemplateRow, mapEventRow, type DemoTemplateRow, type EventRow } from "@/lib/supabaseMappers";
 
 export default function HomePage() {
   const [eventOpen, setEventOpen] = useState(false);
@@ -41,23 +41,37 @@ export default function HomePage() {
         if (error) {
           setTodayDemo(null);
         } else if (calendarRow) {
-          const demo = DEMO_TEMPLATES.find(
-            t => t.id === calendarRow.template_id
-          );
-          setTodayDemo(demo || null);
+          const { data: demoRow, error: demoError } = await supabase
+            .from("demo_templates")
+            .select("*")
+            .eq("id", calendarRow.template_id)
+            .maybeSingle();
+
+          if (demoError || !demoRow) {
+            setTodayDemo(null);
+          } else {
+            setTodayDemo(mapDemoTemplateRow(demoRow as DemoTemplateRow));
+          }
         } else {
           setTodayDemo(null);
         }
 
         // イベントデータの取得（開催期間中のもの）
-        const currentEvents = EVENTS.filter(event => {
-          const start = new Date(event.startDate);
-          const end = new Date(event.endDate);
-          return today >= start && today <= end;
-        });
-        setTodayEvents(currentEvents);
+        const { data: eventsData, error: eventsError } = await supabase
+          .from("events")
+          .select("*")
+          .lte("start_date", todayStr)
+          .gte("end_date", todayStr)
+          .order("start_date", { ascending: true });
+
+        if (eventsError || !eventsData) {
+          setTodayEvents([]);
+        } else {
+          setTodayEvents((eventsData as EventRow[]).map(mapEventRow));
+        }
         setCurrentEventIndex(0);
       } catch (error) {
+        console.error("Failed to load home page data", error);
         setTodayDemo(null);
         setTodayEvents([]);
       } finally {
@@ -93,6 +107,7 @@ export default function HomePage() {
                   fill
                   className="object-cover"
                   sizes="(min-width: 768px) 320px, 100vw"
+                  unoptimized={(todayDemo.img || "").includes("supabase.co")}
                 />
               </div>
               <div className="text-base font-semibold text-neutral-700 mb-2">
@@ -123,11 +138,12 @@ export default function HomePage() {
             <>
               <div className="relative w-full h-96 rounded-lg overflow-hidden">
                 <Image
-                  src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/event_images/${todayEvents[currentEventIndex].id}.png`}
+                  src={getPublicUrl(`event_images/${todayEvents[currentEventIndex].id}.png`)}
                   alt={todayEvents[currentEventIndex].name}
                   fill
                   className="object-cover bg-white"
                   sizes="(min-width: 768px) 320px, 100vw"
+                  unoptimized
                 />
                 {todayEvents.length > 1 && (
                   <>

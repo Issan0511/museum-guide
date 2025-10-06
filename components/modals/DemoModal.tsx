@@ -40,6 +40,7 @@ export default function DemoModal({
                   fill
                   className="object-cover"
                   sizes="(min-width: 768px) 400px, 100vw"
+                  unoptimized={demo.img.includes("supabase.co")}
                 />
               </div>
               <div>
