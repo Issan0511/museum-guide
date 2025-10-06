@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import type { Event } from "@/types/types";
+import { getPublicUrl } from "@/lib/supabasePublic";
 
 export default function EventModal({ open, onClose, event }: { open: boolean; onClose: () => void; event: Event }) {
   if (!open) return null;
@@ -32,11 +33,12 @@ export default function EventModal({ open, onClose, event }: { open: boolean; on
         <CardContent className="p-4 space-y-3">
           <div className="relative w-full h-96 rounded-lg overflow-hidden">
             <Image
-              src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/event_images/${event.id}.png`}
+              src={getPublicUrl(`event_images/${event.id}.png`)}
               alt={event.name}
               fill
               className="object-cover bg-white"
               sizes="(min-width: 768px) 400px, 100vw"
+              unoptimized
             />
           </div>
           <div>
