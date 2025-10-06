@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { DemoTemplate } from "@/types/types";
+import { getPublicUrl } from "@/lib/supabasePublic";
 
 export default function DemoModal({ 
   open, 
@@ -34,7 +35,7 @@ export default function DemoModal({
             <>
               <div className="relative w-full h-48 rounded-lg overflow-hidden">
                 <Image
-                  src={demo.img}
+                  src={getPublicUrl(demo.img || `demo_images/${demo.id}.png`)}
                   alt={`${demo.name}の実演`}
                   fill
                   className="object-cover"

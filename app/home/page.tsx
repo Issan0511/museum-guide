@@ -11,6 +11,7 @@ import CraftGrid from "@/components/CraftGrid";
 import { DEMO_TEMPLATES } from "@/data/demo.seed";
 import { EVENTS } from "@/data/events.seed";
 import { supabase, type CalendarData } from "@/lib/supabase";
+import { getPublicUrl } from "@/lib/supabasePublic";
 import type { DemoTemplate, Event } from "@/types/types";
 
 export default function HomePage() {
@@ -87,7 +88,7 @@ export default function HomePage() {
             <>
               <div className="relative w-full h-60 rounded-lg overflow-hidden">
                 <Image
-                  src={todayDemo.img || "/images/candle-making-demo.png"}
+                  src={getPublicUrl(todayDemo.img || `demo_images/${todayDemo.id}.png`)}
                   alt={`${todayDemo.name}の実演`}
                   fill
                   className="object-cover"
