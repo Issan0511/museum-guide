@@ -35,12 +35,12 @@ export default function DemoModal({
             <>
               <div className="relative w-full h-48 rounded-lg overflow-hidden">
                 <Image
-                  src={getPublicUrl(demo.img || `demo_images/${demo.id}.png`)}
+                  src={getPublicUrl(`demo_images/${demo.id}.png`)}
                   alt={`${demo.name}の実演`}
                   fill
                   className="object-cover"
                   sizes="(min-width: 768px) 400px, 100vw"
-                  unoptimized={demo.img.includes("supabase.co")}
+                  unoptimized
                 />
               </div>
               <div>

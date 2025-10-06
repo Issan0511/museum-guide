@@ -101,12 +101,12 @@ export default function HomePage() {
             <>
               <div className="relative w-full h-60 rounded-lg overflow-hidden">
                 <Image
-                  src={getPublicUrl(todayDemo.img || `demo_images/${todayDemo.id}.png`)}
+                  src={getPublicUrl(`demo_images/${todayDemo.id}.png`)}
                   alt={`${todayDemo.name}の実演`}
                   fill
                   className="object-cover"
                   sizes="(min-width: 768px) 320px, 100vw"
-                  unoptimized={(todayDemo.img || "").includes("supabase.co")}
+                  unoptimized
                 />
               </div>
               <div className="text-base font-semibold text-neutral-700 mb-2">
