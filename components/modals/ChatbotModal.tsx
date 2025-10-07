@@ -10,6 +10,16 @@ interface ChatbotModalProps {
   craftSlug?: string;
 }
 
+// 簡易的なフォーマット関数
+function formatMessage(content: string): React.ReactNode {
+  // 改行を保持して表示
+  return (
+    <pre className="whitespace-pre-wrap break-words font-sans text-sm m-0">
+      {content}
+    </pre>
+  );
+}
+
 export default function ChatbotModal({ open, onClose, craftSlug }: ChatbotModalProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [text, setText] = useState("");
@@ -48,16 +58,76 @@ export default function ChatbotModal({ open, onClose, craftSlug }: ChatbotModalP
       if (!response.ok) {
         throw new Error('Failed to get response');
       }
-      console.log(response)
-      const data = await response.json();
+
+      console.log('Response received:', response);
       
-      const assistantMessage: ChatMessage = {
+      // ストリーミングレスポンスを処理
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
+      let assistantContent = '';
+      let buffer = ''; // SSEのバッファ
+
+      // 空のアシスタントメッセージを追加
+      const assistantMessageIndex = messages.length + 1;
+      setMessages((prev) => [...prev, {
         role: 'assistant',
-        content: data.message,
+        content: '',
         timestamp: new Date()
-      };
+      }]);
+
+      if (reader) {
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) {
+            break;
+          }
+
+          const chunk = decoder.decode(value, { stream: true });
+          
+          // バッファに追加
+          buffer += chunk;
+          
+          // SSE形式のデータをパース（完全な行のみ処理）
+          const lines = buffer.split('\n');
+          
+          // 最後の不完全な行はバッファに残す
+          buffer = lines.pop() || '';
+          
+          for (const line of lines) {
+            if (line.startsWith('data: ')) {
+              const data = line.slice(6);
+              
+              if (data === '[DONE]') {
+                console.log('Stream finished with [DONE]');
+                break;
+              }
+              
+              if (data.startsWith('[ERROR]')) {
+                console.error('Stream error:', data);
+                throw new Error(data.slice(8));
+              }
+              
+              // 通常のテキストデータを追加（マーカーを改行に戻す）
+              const decodedData = data.replace(/⸨NEWLINE⸩/g, '\n');
+              assistantContent += decodedData;
+              
+              // メッセージを更新
+              setMessages((prev) => {
+                const updated = [...prev];
+                updated[assistantMessageIndex] = {
+                  role: 'assistant',
+                  content: assistantContent,
+                  timestamp: new Date()
+                };
+                return updated;
+              });
+            }
+          }
+        }
+      }
       
-      setMessages((prev) => [...prev, assistantMessage]);
+      console.log('Final assistant message:', assistantContent);
+      console.log('Final message length:', assistantContent.length);
     } catch (error) {
       console.error('Chat error:', error);
       const errorMessage: ChatMessage = {
@@ -103,16 +173,20 @@ export default function ChatbotModal({ open, onClose, craftSlug }: ChatbotModalP
               {messages.map((message, index) => (
                 <div
                   key={index}
-                  className={`p-3 rounded-lg ${
+                  className={`p-4 rounded-lg ${ 
                     message.role === 'user'
                       ? 'bg-blue-500 text-white ml-8'
                       : 'bg-white border mr-8'
                   }`}
                 >
-                  <div className="text-sm whitespace-pre-wrap">{message.content}</div>
+                  <div className="text-sm leading-relaxed whitespace-pre-wrap break-words">
+                    {message.role === 'assistant' && message.content
+                      ? formatMessage(message.content)
+                      : message.content || '...'}
+                  </div>
                   {message.timestamp && (
-                    <div className={`text-xs mt-1 ${
-                      message.role === 'user' ? 'text-blue-100' : 'text-neutral-500'
+                    <div className={`text-xs mt-2 pt-2 border-t ${
+                      message.role === 'user' ? 'text-blue-100 border-blue-400' : 'text-neutral-500 border-neutral-200'
                     }`}>
                       {message.timestamp.toLocaleTimeString('ja-JP', { 
                         hour: '2-digit', 
