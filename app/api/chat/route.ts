@@ -62,10 +62,12 @@ ${md}`;
   const stream = new ReadableStream({
     async start(controller) {
       const enc = new TextEncoder();
-      const send = (data: string) =>
+      const send = (data: string) => {
         controller.enqueue(enc.encode(`data: ${data}\n\n`));
+      };
 
       try {
+        console.log('Starting OpenAI stream...');
         const resp = await openai.chat.completions.create({
           model: "gpt-5-mini",
           stream: true,
@@ -76,10 +78,16 @@ ${md}`;
           max_completion_tokens: 2000,
         });
 
+        let fullResponse = '';
         for await (const part of resp) {
           const delta = part.choices?.[0]?.delta?.content;
-          if (delta) send(delta);
+          if (delta) {
+            fullResponse += delta;
+            send(delta);
+          }
         }
+        console.log('Stream complete. Response length:', fullResponse.length);
+        console.log('Has newlines:', fullResponse.includes('\n'));
         send("[DONE]");
       } catch (e: unknown) {
         console.error("Chat error:", e);
