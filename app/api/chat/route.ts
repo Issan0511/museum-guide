@@ -83,12 +83,13 @@ ${md}`;
           const delta = part.choices?.[0]?.delta?.content;
           if (delta) {
             fullResponse += delta;
-            send(delta);
+            // 改行を特殊マーカーに置き換えて送信
+            const markedDelta = delta.replace(/\n/g, '⸨NEWLINE⸩');
+            send(markedDelta);
           }
         }
         console.log('Stream complete. Response length:', fullResponse.length);
         console.log('Has newlines:', fullResponse.includes('\n'));
-        send("[DONE]");
       } catch (e: unknown) {
         console.error("Chat error:", e);
         send(`[ERROR] ${e instanceof Error ? e.message : "unknown error"}`);

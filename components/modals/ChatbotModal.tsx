@@ -12,45 +12,12 @@ interface ChatbotModalProps {
 
 // 簡易的なフォーマット関数
 function formatMessage(content: string): React.ReactNode {
-  const lines = content.split('\n');
-  const elements: React.ReactNode[] = [];
-  
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-    const trimmed = line.trim();
-    
-    if (trimmed === '') {
-      // 空行はスペースとして扱う
-      elements.push(<div key={i} className="h-3" />);
-    } else if (trimmed.startsWith('- ')) {
-      // 箇条書き
-      elements.push(
-        <div key={i} className="flex gap-2 ml-2 mb-1">
-          <span className="text-blue-500 font-bold">•</span>
-          <span className="flex-1">{trimmed.slice(2)}</span>
-        </div>
-      );
-    } else if (trimmed.match(/^[#]+\s/)) {
-      // 見出し（# で始まる）
-      const level = trimmed.match(/^[#]+/)?.[0].length || 1;
-      const text = trimmed.replace(/^[#]+\s/, '');
-      const fontSize = level === 1 ? 'text-lg' : 'text-base';
-      elements.push(
-        <div key={i} className={`font-bold ${fontSize} mt-2 mb-1`}>
-          {text}
-        </div>
-      );
-    } else {
-      // 通常のテキスト
-      elements.push(
-        <div key={i} className="mb-1">
-          {line}
-        </div>
-      );
-    }
-  }
-  
-  return <>{elements}</>;
+  // 改行を保持して表示
+  return (
+    <pre className="whitespace-pre-wrap break-words font-sans text-sm m-0">
+      {content}
+    </pre>
+  );
 }
 
 export default function ChatbotModal({ open, onClose, craftSlug }: ChatbotModalProps) {
@@ -109,15 +76,12 @@ export default function ChatbotModal({ open, onClose, craftSlug }: ChatbotModalP
       }]);
 
       if (reader) {
-        let chunkNumber = 0;
         while (true) {
           const { done, value } = await reader.read();
           if (done) {
-            console.log('Stream complete. Total chunks:', chunkNumber);
             break;
           }
 
-          chunkNumber++;
           const chunk = decoder.decode(value, { stream: true });
           
           // バッファに追加
@@ -143,8 +107,9 @@ export default function ChatbotModal({ open, onClose, craftSlug }: ChatbotModalP
                 throw new Error(data.slice(8));
               }
               
-              // 通常のテキストデータを追加（改行も含めて）
-              assistantContent += data;
+              // 通常のテキストデータを追加（マーカーを改行に戻す）
+              const decodedData = data.replace(/⸨NEWLINE⸩/g, '\n');
+              assistantContent += decodedData;
               
               // メッセージを更新
               setMessages((prev) => {
