@@ -5,13 +5,14 @@ import path from "path";
 import { SEED } from "@/data/crafts.seed";
 import type { CraftItem } from "@/types/craft";
 import { pickLang } from "@/types/craft";
+import type { UserProfile } from "@/types/types";
 
 export const runtime = "nodejs"; // fs利用のためEdgeは不可
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 export async function POST(req: NextRequest) {
-  const { messages, craftSlug } = await req.json();
+  const { messages, craftSlug, userProfile } = await req.json();
 
   if (!messages || !Array.isArray(messages)) {
     return new Response(JSON.stringify({ error: "Invalid messages format" }), {
@@ -20,7 +21,21 @@ export async function POST(req: NextRequest) {
   }
 
   let systemPrompt =
-    "あなたは博物館の案内チャットボットです。日本語で丁寧に対応してください。博物館の展示品、工芸品、イベント、施設について案内することができます。インターネットには接続されていません。最新の情報は正直にわからないと答え、代わりにカットオフ日時点の情報を提供してください。";
+    "あなたは博物館の案内チャットボットです。日本語で丁寧に対応してください。博物館の展示品、工芸品、イベント、施設について案内することができます。インターネットには接続されていません。max_completion_tokens が2000なので、必要な情報のみを回答してください";
+
+  // ユーザーの年齢層に応じて話し方を調整
+  if (userProfile && userProfile.age) {
+    if (userProfile.age === 9) {
+      // 12歳以下：小学生向け
+      systemPrompt += "\n\nユーザーは小学生です。わかりやすい言葉を使い、難しい漢字はひらがなで説明し、楽しく親しみやすい口調で話してください。";
+    } else if (userProfile.age === 16) {
+      // 13-17歳：中高生向け
+      systemPrompt += "\n\nユーザーは中高生です。丁寧でありながらもフレンドリーな口調で、興味を引くような説明を心がけてください。";
+    } else {
+      // 18歳以上：通常の大人向け
+      systemPrompt += "\n\nユーザーは大人です。";
+    }
+  }
 
   if (craftSlug) {
     const craftItem = (SEED as CraftItem[]).find((c) => c.slug === craftSlug);
