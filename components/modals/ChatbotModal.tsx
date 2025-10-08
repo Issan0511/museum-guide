@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ChatMessage } from "@/types/types";
+import { useUser } from "@/contexts/UserContext";
 
 interface ChatbotModalProps {
   open: boolean;
@@ -24,6 +25,7 @@ export default function ChatbotModal({ open, onClose, craftSlug }: ChatbotModalP
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [text, setText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const { userProfile } = useUser();
   
   if (!open) return null;
 
@@ -51,7 +53,8 @@ export default function ChatbotModal({ open, onClose, craftSlug }: ChatbotModalP
             role: msg.role,
             content: msg.content
           })),
-          craftSlug: craftSlug
+          craftSlug: craftSlug,
+          userProfile: userProfile
         }),
       });
 
