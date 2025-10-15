@@ -6,7 +6,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import EventModal from "@/components/modals/EventModal";
 import DemoModal from "@/components/modals/DemoModal";
-import ChatbotModal from "@/components/modals/ChatbotModal";
 import CraftGrid from "@/components/CraftGrid";
 import { supabase, type CalendarData } from "@/lib/supabase";
 import { getPublicUrl } from "@/lib/supabasePublic";
@@ -16,7 +15,6 @@ import { mapDemoTemplateRow, mapEventRow, type DemoTemplateRow, type EventRow } 
 export default function HomePage() {
   const [eventOpen, setEventOpen] = useState(false);
   const [demoOpen, setDemoOpen] = useState(false);
-  const [chatOpen, setChatOpen] = useState(false);
   const [todayDemo, setTodayDemo] = useState<DemoTemplate | null>(null);
   const [todayEvents, setTodayEvents] = useState<Event[]>([]);
   const [currentEventIndex, setCurrentEventIndex] = useState(0);
@@ -205,16 +203,6 @@ export default function HomePage() {
           demo={todayDemo}
         />
       )}
-      <ChatbotModal open={chatOpen} onClose={() => setChatOpen(false)} />
-
-      <Button
-        className="fixed right-4 bottom-4 w-14 h-14 rounded-full bg-neutral-900 hover:bg-neutral-800 shadow-lg z-50"
-        onClick={() => setChatOpen(true)}
-      >
-        <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M4 4h16v10H7l-3 3V4z" />
-        </svg>
-      </Button>
     </div>
   );
 }
