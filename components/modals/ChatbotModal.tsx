@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ChatMessage } from "@/types/types";
 import { useUser } from "@/contexts/UserContext";
+import { getLocale, getTranslations } from "@/lib/i18n";
 
 interface ChatbotModalProps {
   open: boolean;
@@ -26,7 +27,10 @@ export default function ChatbotModal({ open, onClose, craftSlug }: ChatbotModalP
   const [text, setText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { userProfile } = useUser();
-  
+  const lang = userProfile?.language ?? "ja";
+  const t = getTranslations(lang);
+  const locale = getLocale(lang);
+
   if (!open) return null;
 
   const send = async () => {
@@ -135,7 +139,7 @@ export default function ChatbotModal({ open, onClose, craftSlug }: ChatbotModalP
       console.error('Chat error:', error);
       const errorMessage: ChatMessage = {
         role: 'assistant',
-        content: '申し訳ございません。エラーが発生しました。もう一度お試しください。',
+        content: t.chatbot.error,
         timestamp: new Date()
       };
       setMessages((prev) => [...prev, errorMessage]);
@@ -154,29 +158,30 @@ export default function ChatbotModal({ open, onClose, craftSlug }: ChatbotModalP
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-3 bg-black/40">
       <Card className="w-full max-w-md max-h-[80vh] flex flex-col relative">
-        <Button 
-          size="sm" 
-          variant="outline" 
-          className="absolute top-3 right-3 h-8 w-8 p-0 bg-white hover:bg-neutral-100 z-10" 
+        <Button
+          size="sm"
+          variant="outline"
+          className="absolute top-3 right-3 h-8 w-8 p-0 bg-white hover:bg-neutral-100 z-10"
           onClick={onClose}
         >
           ×
         </Button>
         <CardHeader className="pb-3 border-b">
-          <CardTitle className="text-base">博物館案内チャット</CardTitle>
+          <CardTitle className="text-base">{t.chatbot.title}</CardTitle>
         </CardHeader>
         <CardContent className="flex-1 p-3 bg-neutral-50 overflow-auto">
           {messages.length === 0 ? (
             <div className="text-sm text-neutral-600 space-y-2">
-              <p>こんにちは！博物館案内チャットボットです。</p>
-              <p>展示品、工芸品、イベント、施設についてお気軽にお聞きください。</p>
+              {t.chatbot.intro.map((line, index) => (
+                <p key={index}>{line}</p>
+              ))}
             </div>
           ) : (
             <div className="space-y-3">
               {messages.map((message, index) => (
                 <div
                   key={index}
-                  className={`p-4 rounded-lg ${ 
+                  className={`p-4 rounded-lg ${
                     message.role === 'user'
                       ? 'bg-blue-500 text-white ml-8'
                       : 'bg-white border mr-8'
@@ -191,9 +196,9 @@ export default function ChatbotModal({ open, onClose, craftSlug }: ChatbotModalP
                     <div className={`text-xs mt-2 pt-2 border-t ${
                       message.role === 'user' ? 'text-blue-100 border-blue-400' : 'text-neutral-500 border-neutral-200'
                     }`}>
-                      {message.timestamp.toLocaleTimeString('ja-JP', { 
-                        hour: '2-digit', 
-                        minute: '2-digit' 
+                      {message.timestamp.toLocaleTimeString(locale, {
+                        hour: '2-digit',
+                        minute: '2-digit'
                       })}
                     </div>
                   )}
@@ -201,7 +206,7 @@ export default function ChatbotModal({ open, onClose, craftSlug }: ChatbotModalP
               ))}
               {isLoading && (
                 <div className="bg-white border mr-8 p-3 rounded-lg">
-                  <div className="text-sm text-neutral-500">返信を作成中...</div>
+                  <div className="text-sm text-neutral-500">{t.chatbot.typing}</div>
                 </div>
               )}
             </div>
@@ -213,18 +218,18 @@ export default function ChatbotModal({ open, onClose, craftSlug }: ChatbotModalP
             onChange={(event) => setText(event.target.value)}
             onKeyPress={handleKeyPress}
             type="text"
-            placeholder="メッセージを入力してください..."
+            placeholder={t.chatbot.inputPlaceholder}
             disabled={isLoading}
             className="flex-1 px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/30 disabled:opacity-50"
           />
-          <Button 
-            size="sm" 
-            variant="outline" 
-            className="px-4 bg-blue-500 text-white hover:bg-blue-600 border-blue-500" 
+          <Button
+            size="sm"
+            variant="outline"
+            className="px-4 bg-blue-500 text-white hover:bg-blue-600 border-blue-500"
             onClick={send}
             disabled={isLoading || !text.trim()}
           >
-            {isLoading ? '送信中...' : '送信'}
+            {isLoading ? t.chatbot.sending : t.chatbot.send}
           </Button>
         </div>
       </Card>

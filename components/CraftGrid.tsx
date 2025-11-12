@@ -8,6 +8,7 @@ import { pickLang } from "@/types/types";
 import { getPublicUrl } from "@/lib/supabasePublic";
 import { supabase } from "@/lib/supabase";
 import { mapCraftRow, type CraftRow } from "@/lib/supabaseMappers";
+import { getTranslations } from "@/lib/i18n";
 
 type Props = { lang?: Lang };
 
@@ -45,6 +46,8 @@ export default function CraftGrid({ lang = "ja" }: Props) {
     };
   }, []);
 
+  const t = useMemo(() => getTranslations(lang), [lang]);
+
   const items = useMemo(() => {
     return crafts.map((craft) => {
       const label = pickLang(craft.name, lang) ?? "";
@@ -59,7 +62,7 @@ export default function CraftGrid({ lang = "ja" }: Props) {
 
   return (
     <div>
-      <h3 className="font-semibold mb-3">工芸一覧</h3>
+      <h3 className="font-semibold mb-3">{t.craftGrid.heading}</h3>
       {loading ? (
         <div className="grid grid-cols-3 gap-3">
           {Array.from({ length: 6 }).map((_, index) => (

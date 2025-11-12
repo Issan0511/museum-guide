@@ -2,24 +2,29 @@
 import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { DemoTemplate } from "@/types/types";
+import { DemoTemplate, UserLanguage } from "@/types/types";
 import { getPublicUrl } from "@/lib/supabasePublic";
+import { getTranslations } from "@/lib/i18n";
 
-export default function DemoModal({ 
-  open, 
-  onClose, 
-  demo 
-}: { 
-  open: boolean; 
-  onClose: () => void; 
+export default function DemoModal({
+  open,
+  onClose,
+  demo,
+  lang
+}: {
+  open: boolean;
+  onClose: () => void;
   demo?: DemoTemplate;
+  lang?: UserLanguage;
 }) {
   if (!open) return null;
-  
+
+  const t = getTranslations(lang);
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40">
       <Card className="w-full max-w-md relative">
-        <Button 
+        <Button
           size="sm" 
           variant="outline" 
           className="absolute top-3 right-3 h-8 w-8 p-0 bg-white hover:bg-neutral-100 z-10" 
@@ -28,7 +33,7 @@ export default function DemoModal({
           ×
         </Button>
         <CardHeader className="pb-3 border-b">
-          <CardTitle className="text-base">職人実演</CardTitle>
+          <CardTitle className="text-base">{t.demoModal.title}</CardTitle>
         </CardHeader>
         <CardContent className="p-4 space-y-4">
           {demo ? (
@@ -36,7 +41,7 @@ export default function DemoModal({
               <div className="relative w-full h-48 rounded-lg overflow-hidden">
                 <Image
                   src={getPublicUrl(`demo_images/${demo.id}.png`)}
-                  alt={`${demo.name}の実演`}
+                  alt={demo.name}
                   fill
                   className="object-cover"
                   sizes="(min-width: 768px) 400px, 100vw"
@@ -51,7 +56,7 @@ export default function DemoModal({
               </div>
             </>
           ) : (
-            <p className="text-sm text-neutral-700">準備中</p>
+            <p className="text-sm text-neutral-700">{t.demoModal.empty}</p>
           )}
         </CardContent>
       </Card>
