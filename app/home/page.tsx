@@ -10,6 +10,7 @@ import CraftGrid from "@/components/CraftGrid";
 import { supabase, type CalendarData } from "@/lib/supabase";
 import { getPublicUrl } from "@/lib/supabasePublic";
 import type { DemoTemplate, Event } from "@/types/types";
+import { pickLang } from "@/types/types";
 import { mapDemoTemplateRow, mapEventRow, type DemoTemplateRow, type EventRow } from "@/lib/supabaseMappers";
 import { useUser } from "@/contexts/UserContext";
 import { getTranslations } from "@/lib/i18n";
@@ -86,6 +87,9 @@ export default function HomePage() {
   }, []);
 
 
+  const currentDemoName = todayDemo ? pickLang(todayDemo.name, lang) ?? "" : "";
+  const currentEventName = todayEvents.length > 0 ? pickLang(todayEvents[currentEventIndex].name, lang) ?? "" : "";
+
   return (
     <div className="space-y-4">
       <button onClick={() => history.back()} className="text-sm text-neutral-700 hover:text-neutral-900 mb-3">
@@ -106,7 +110,7 @@ export default function HomePage() {
               <div className="relative w-full h-60 rounded-lg overflow-hidden">
                 <Image
                   src={getPublicUrl(`demo_images/${todayDemo.id}.png`)}
-                  alt={todayDemo.name}
+                  alt={currentDemoName}
                   fill
                   className="object-cover"
                   sizes="(min-width: 768px) 320px, 100vw"
@@ -114,7 +118,7 @@ export default function HomePage() {
                 />
               </div>
               <div className="text-base font-semibold text-neutral-700 mb-2">
-                {todayDemo.name}
+                {currentDemoName}
               </div>
               <Button variant="outline" onClick={() => setDemoOpen(true)}>
                 {t.home.viewDetails}
@@ -142,7 +146,7 @@ export default function HomePage() {
               <div className="relative w-full h-96 rounded-lg overflow-hidden">
                 <Image
                   src={getPublicUrl(`event_images/${todayEvents[currentEventIndex].id}.png`)}
-                  alt={todayEvents[currentEventIndex].name}
+                  alt={currentEventName}
                   fill
                   className="object-cover bg-white"
                   sizes="(min-width: 768px) 320px, 100vw"
@@ -173,7 +177,7 @@ export default function HomePage() {
               </div>
               <div className="flex items-center justify-between">
                 <div className="text-base font-semibold text-neutral-700">
-                  {todayEvents[currentEventIndex].name}
+                  {currentEventName}
                 </div>
                 {todayEvents.length > 1 && (
                   <div className="text-sm text-neutral-600">

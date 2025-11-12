@@ -109,7 +109,7 @@ export default function CraftPage({ params }: { params: Promise<{ id: string }> 
             unoptimized={hero.includes("supabase.co")}
           />
         </div>
-        <p className="text-sm leading-relaxed text-neutral-700">{pickLang(item.summary, lang) ?? ""}</p>
+        <p className="text-sm leading-relaxed text-neutral-700">{pickLang(item.description, lang) ?? ""}</p>
       </div>
 
       {item.youtubeId && (

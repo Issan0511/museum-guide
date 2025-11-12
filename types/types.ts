@@ -49,8 +49,8 @@ export interface CraftItem {
 // ---------- 3) DemoTemplate ----------
 export interface DemoTemplate {
   id: number;                  // 実演テンプレートの識別ID
-  name: string;                // 伝統工芸の名前
-  description: string;         // 50字程度の一文
+  name: Multilang;             // 伝統工芸の名前
+  description: Multilang;      // 50字程度の一文
   // 画像パスは demo_images/${id}.png として自動生成
 }
 
@@ -58,10 +58,10 @@ export interface DemoTemplate {
 
 export interface Event {
   id: number;
-  name: string;
+  name: Multilang;
   startDate: Date;
   endDate: Date;
-  detail: string;
+  detail: Multilang;
 }
 
 // ---------- 5) Helpers ----------

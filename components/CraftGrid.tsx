@@ -53,7 +53,7 @@ export default function CraftGrid({ lang = "ja" }: Props) {
       const label = pickLang(craft.name, lang) ?? "";
       return {
         name: label,
-        reading: craft.kana ?? "",
+        reading: lang === "ja" ? craft.kana ?? "" : "",
         id: craft.id,
         imageUrl: getPublicUrl(`craft_images/${craft.id}.png`)
       };

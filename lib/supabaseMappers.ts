@@ -69,8 +69,8 @@ export type DemoTemplateRow = {
 export function mapDemoTemplateRow(row: DemoTemplateRow): DemoTemplate {
   return {
     id: row.id,
-    name: row.name_ja ?? row.name_en ?? row.name_zh ?? "",
-    description: row.description_ja ?? row.description_en ?? row.description_zh ?? "",
+    name: toMultilang({ ja: row.name_ja ?? undefined, en: row.name_en ?? undefined, zh: row.name_zh ?? undefined }),
+    description: toMultilang({ ja: row.description_ja ?? undefined, en: row.description_en ?? undefined, zh: row.description_zh ?? undefined }),
   };
 }
 
@@ -89,9 +89,9 @@ export type EventRow = {
 export function mapEventRow(row: EventRow): Event {
   return {
     id: row.id,
-    name: row.name_ja ?? row.name_en ?? row.name_zh ?? "",
+    name: toMultilang({ ja: row.name_ja ?? undefined, en: row.name_en ?? undefined, zh: row.name_zh ?? undefined }),
     startDate: new Date(row.start_date),
     endDate: new Date(row.end_date),
-    detail: row.detail_ja ?? row.detail_en ?? row.detail_zh ?? "",
+    detail: toMultilang({ ja: row.detail_ja ?? undefined, en: row.detail_en ?? undefined, zh: row.detail_zh ?? undefined }),
   };
 }

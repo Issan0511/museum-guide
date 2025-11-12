@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { DemoTemplate, UserLanguage } from "@/types/types";
+import { DemoTemplate, UserLanguage, pickLang } from "@/types/types";
 import { getPublicUrl } from "@/lib/supabasePublic";
 import { getTranslations } from "@/lib/i18n";
 
@@ -10,7 +10,7 @@ export default function DemoModal({
   open,
   onClose,
   demo,
-  lang
+  lang = "ja"
 }: {
   open: boolean;
   onClose: () => void;
@@ -20,6 +20,8 @@ export default function DemoModal({
   if (!open) return null;
 
   const t = getTranslations(lang);
+  const demoName = demo ? pickLang(demo.name, lang) ?? "" : "";
+  const demoDescription = demo ? pickLang(demo.description, lang) ?? "" : "";
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40">
@@ -41,7 +43,7 @@ export default function DemoModal({
               <div className="relative w-full h-48 rounded-lg overflow-hidden">
                 <Image
                   src={getPublicUrl(`demo_images/${demo.id}.png`)}
-                  alt={demo.name}
+                  alt={demoName}
                   fill
                   className="object-cover"
                   sizes="(min-width: 768px) 400px, 100vw"
@@ -49,9 +51,9 @@ export default function DemoModal({
                 />
               </div>
               <div>
-                <h3 className="text-lg font-semibold mb-2">{demo.name}</h3>
+                <h3 className="text-lg font-semibold mb-2">{demoName}</h3>
                 <p className="text-sm text-neutral-700 leading-relaxed">
-                  {demo.description}
+                  {demoDescription}
                 </p>
               </div>
             </>
