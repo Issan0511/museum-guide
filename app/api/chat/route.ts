@@ -90,7 +90,7 @@ ${md}`;
             { role: "system", content: systemPrompt },
             ...messages,
           ],
-          max_completion_tokens: 2000,
+          max_completion_tokens: 5000,
         });
 
         let fullResponse = '';

@@ -10,29 +10,51 @@ import type { AgeGroup, UserLanguage } from "@/types/types";
 export default function LangPage() {
   const [age, setAge] = useState<AgeGroup | "">("");
   const [language, setLanguage] = useState<UserLanguage | "">("");
+  const [isNavigating, setIsNavigating] = useState(false);
   const router = useRouter();
   const { setUserProfile } = useUser();
 
-  const handleLanguageSelect = (lang: UserLanguage) => {
+  const handleLanguageSelect = async (lang: UserLanguage) => {
     setLanguage(lang);
-    
+
     // Both age and language must be selected
     if (age && lang) {
+      setIsNavigating(true);
       setUserProfile({ age, language: lang });
-      router.push("/home");
+
+      // Add a small delay for better UX
+      setTimeout(() => {
+        router.push("/home");
+      }, 800);
     }
   };
 
-  const handleAgeChange = (value: string) => {
+  const handleAgeChange = async (value: string) => {
     const ageValue = parseInt(value) as AgeGroup;
     setAge(ageValue);
-    
+
     // If language is already selected, save and navigate
     if (language) {
+      setIsNavigating(true);
       setUserProfile({ age: ageValue, language });
-      router.push("/home");
+
+      // Add a small delay for better UX
+      setTimeout(() => {
+        router.push("/home");
+      }, 800);
     }
   };
+
+  if (isNavigating) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[50vh] gap-4">
+        <div className="relative">
+          <div className="w-8 h-8 border-4 border-neutral-200 border-t-blue-500 rounded-full animate-spin"></div>
+        </div>
+        <div className="text-sm text-neutral-600">設定を保存しています...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8">
