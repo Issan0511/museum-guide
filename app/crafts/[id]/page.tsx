@@ -11,6 +11,8 @@ import { Button } from "@/components/ui/button";
 import ChatbotModal from "@/components/modals/ChatbotModal";
 import { supabase } from "@/lib/supabase";
 import { mapCraftRow, type CraftRow } from "@/lib/supabaseMappers";
+import { useUser } from "@/contexts/UserContext";
+import { getTranslations } from "@/lib/i18n";
 
 export default function CraftPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -19,6 +21,9 @@ export default function CraftPage({ params }: { params: Promise<{ id: string }> 
   const [loading, setLoading] = useState(true);
   const [missing, setMissing] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
+  const { userProfile } = useUser();
+  const lang = userProfile?.language ?? "ja";
+  const t = useMemo(() => getTranslations(lang), [lang]);
 
   useEffect(() => {
     if (Number.isNaN(numericId)) {
@@ -64,8 +69,8 @@ export default function CraftPage({ params }: { params: Promise<{ id: string }> 
 
   const title = useMemo(() => {
     if (!item) return "";
-    return pickLang(item.name, "ja") ?? "";
-  }, [item]);
+    return pickLang(item.name, lang) ?? "";
+  }, [item, lang]);
 
   if (!loading && missing) {
     return notFound();
@@ -75,7 +80,7 @@ export default function CraftPage({ params }: { params: Promise<{ id: string }> 
     return (
       <div className="space-y-6">
         <button onClick={() => history.back()} className="text-sm text-neutral-700 hover:text-neutral-900 mb-3">
-          ← 工芸一覧へ戻る
+          {t.craftPage.backToList}
         </button>
         <div className="space-y-3">
           <div className="w-full aspect-[16/9] bg-neutral-200 rounded-lg animate-pulse" />
@@ -89,28 +94,28 @@ export default function CraftPage({ params }: { params: Promise<{ id: string }> 
   return (
     <div className="space-y-6">
       <button onClick={() => history.back()} className="text-sm text-neutral-700 hover:text-neutral-900 mb-3">
-        ← 工芸一覧へ戻る
+        {t.craftPage.backToList}
       </button>
 
       <div>
         <h1 className="text-2xl font-bold mb-3">{title}</h1>
         <div className="relative w-full aspect-[16/9] mb-3 rounded-lg overflow-hidden bg-gray-100">
-            <Image
-              src={hero}
-              alt={title}
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 400px"
-              unoptimized={hero.includes("supabase.co")}
-            />
-          </div>
-          <p className="text-sm leading-relaxed text-neutral-700">{pickLang(item.summary, "ja") ?? ""}</p>
+          <Image
+            src={hero}
+            alt={title}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 400px"
+            unoptimized={hero.includes("supabase.co")}
+          />
+        </div>
+        <p className="text-sm leading-relaxed text-neutral-700">{pickLang(item.summary, lang) ?? ""}</p>
       </div>
 
       {item.youtubeId && (
         <Card className="bg-neutral-50 border-neutral-200 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-base font-semibold">動画</CardTitle>
+            <CardTitle className="text-base font-semibold">{t.craftPage.videoSectionTitle}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="relative w-full pt-[56.25%] rounded-lg overflow-hidden">
@@ -129,19 +134,17 @@ export default function CraftPage({ params }: { params: Promise<{ id: string }> 
       {item.shopCollection ? (
         <Card className="bg-white border-neutral-200 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-base font-semibold">ショップ</CardTitle>
+            <CardTitle className="text-base font-semibold">{t.craftPage.shopSectionTitle}</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-neutral-600 mb-4">
-              この工芸品をオンラインショップで購入できます
-            </p>
-            <p className="text-sm text-neutral-500">下のアイコンをタップ↓</p>
-            <a 
+            <p className="text-sm text-neutral-600 mb-4">{t.craftPage.shopPrimaryDescription}</p>
+            <p className="text-sm text-neutral-500">{t.craftPage.shopTapHint}</p>
+            <a
               href={`https://mocad-shop.com/collections/${item.shopCollection}`}
               target="_blank"
               rel="noopener noreferrer"
               className="block"
-              aria-label="MOCADショップでこの工芸品を見る"
+              aria-label={t.craftPage.shopPrimaryAria}
             >
               <div className="relative w-full h-32 mx-auto hover:opacity-80 transition-opacity cursor-pointer">
                 <Image
@@ -158,18 +161,16 @@ export default function CraftPage({ params }: { params: Promise<{ id: string }> 
       ) : (
         <Card className="bg-white border-neutral-200 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-base font-semibold">ショップ</CardTitle>
+            <CardTitle className="text-base font-semibold">{t.craftPage.shopSectionTitle}</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-neutral-600 mb-4">
-              他の工芸品をオンラインショップで購入できます
-            </p>
-            <a 
+            <p className="text-sm text-neutral-600 mb-4">{t.craftPage.shopOtherDescription}</p>
+            <a
               href="https://mocad-shop.com/"
               target="_blank"
               rel="noopener noreferrer"
               className="block"
-              aria-label="MOCADショップで他の工芸品を見る"
+              aria-label={t.craftPage.shopOtherAria}
             >
               <div className="relative w-full h-32 mx-auto hover:opacity-80 transition-opacity cursor-pointer">
                 <Image
