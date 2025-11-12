@@ -52,7 +52,7 @@ export async function POST(req: NextRequest) {
 - 詳細: ${desc}`;
 
       try {
-        const mdUrl = getPublicUrl(`craft_texts/${craftSlug}.md`);
+        const mdUrl = getPublicUrl(`craft_texts/${craftItem.id}.md`);
         const response = await fetch(mdUrl);
         if (response.ok) {
           const md = await response.text();

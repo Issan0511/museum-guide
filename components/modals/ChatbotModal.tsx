@@ -225,7 +225,7 @@ export default function ChatbotModal({ open, onClose, craftSlug }: ChatbotModalP
           <Button
             size="sm"
             variant="outline"
-            className="px-4 bg-blue-500 text-white hover:bg-blue-600 border-blue-500"
+            className="px-4 bg-blue-500 text-black hover:bg-blue-600 border-blue-500"
             onClick={send}
             disabled={isLoading || !text.trim()}
           >
