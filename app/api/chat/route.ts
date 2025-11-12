@@ -1,13 +1,12 @@
 import { NextRequest } from "next/server";
 import OpenAI from "openai";
-import { promises as fs } from "fs";
-import path from "path";
 import { SEED } from "@/data/crafts.seed";
 import type { CraftItem } from "@/types/craft";
 import { pickLang } from "@/types/craft";
 import type { UserProfile } from "@/types/types";
+import { getPublicUrl } from "@/lib/supabasePublic";
 
-export const runtime = "nodejs"; // fs利用のためEdgeは不可
+export const runtime = "nodejs";
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
@@ -53,17 +52,15 @@ export async function POST(req: NextRequest) {
 - 詳細: ${desc}`;
 
       try {
-        const mdPath = path.join(
-          process.cwd(),
-          "public",
-          "craft_texts",
-          `${craftSlug}.md`,
-        );
-        const md = await fs.readFile(mdPath, "utf-8");
-        systemPrompt += `
+        const mdUrl = getPublicUrl(`craft_texts/${craftSlug}.md`);
+        const response = await fetch(mdUrl);
+        if (response.ok) {
+          const md = await response.text();
+          systemPrompt += `
 
 以下は${name}に関する詳細な展示情報です：
 ${md}`;
+        }
       } catch {
         // MD無しは無視
       }
