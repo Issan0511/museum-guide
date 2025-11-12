@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import EventModal from "@/components/modals/EventModal";
@@ -11,6 +11,8 @@ import { supabase, type CalendarData } from "@/lib/supabase";
 import { getPublicUrl } from "@/lib/supabasePublic";
 import type { DemoTemplate, Event } from "@/types/types";
 import { mapDemoTemplateRow, mapEventRow, type DemoTemplateRow, type EventRow } from "@/lib/supabaseMappers";
+import { useUser } from "@/contexts/UserContext";
+import { getTranslations } from "@/lib/i18n";
 
 export default function HomePage() {
   const [eventOpen, setEventOpen] = useState(false);
@@ -19,6 +21,10 @@ export default function HomePage() {
   const [todayEvents, setTodayEvents] = useState<Event[]>([]);
   const [currentEventIndex, setCurrentEventIndex] = useState(0);
   const [loading, setLoading] = useState(true);
+  const { userProfile } = useUser();
+
+  const lang = useMemo(() => userProfile?.language ?? "ja", [userProfile]);
+  const t = useMemo(() => getTranslations(lang), [lang]);
 
   useEffect(() => {
     const fetchTodayData = async () => {
@@ -83,24 +89,24 @@ export default function HomePage() {
   return (
     <div className="space-y-4">
       <button onClick={() => history.back()} className="text-sm text-neutral-700 hover:text-neutral-900 mb-3">
-        ← 言語選択へ戻る
+        {t.home.backToLanguageSelection}
       </button>
 
       <Card className="bg-neutral-100 border-neutral-200 shadow-sm">
         <CardHeader className="pb-3">
-          <CardTitle className="text-lg">本日の職人実演</CardTitle>
+          <CardTitle className="text-lg">{t.home.todaysDemoTitle}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
           {loading ? (
             <div className="text-center py-8">
-              <p className="text-neutral-600">読み込み中...</p>
+              <p className="text-neutral-600">{t.home.loading}</p>
             </div>
           ) : todayDemo ? (
             <>
               <div className="relative w-full h-60 rounded-lg overflow-hidden">
                 <Image
                   src={getPublicUrl(`demo_images/${todayDemo.id}.png`)}
-                  alt={`${todayDemo.name}の実演`}
+                  alt={todayDemo.name}
                   fill
                   className="object-cover"
                   sizes="(min-width: 768px) 320px, 100vw"
@@ -111,12 +117,12 @@ export default function HomePage() {
                 {todayDemo.name}
               </div>
               <Button variant="outline" onClick={() => setDemoOpen(true)}>
-                詳細を見る
+                {t.home.viewDetails}
               </Button>
             </>
           ) : (
             <div className="text-center py-8">
-              <p className="text-neutral-600">本日のデモはありません</p>
+              <p className="text-neutral-600">{t.home.noDemo}</p>
             </div>
           )}
         </CardContent>
@@ -124,12 +130,12 @@ export default function HomePage() {
 
       <Card className="bg-neutral-100 border-neutral-200 shadow-sm">
         <CardHeader className="pb-3">
-          <CardTitle className="text-lg">本日開催中のイベント</CardTitle>
+          <CardTitle className="text-lg">{t.home.eventsTitle}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
           {loading ? (
             <div className="text-center py-8">
-              <p className="text-neutral-600">読み込み中...</p>
+              <p className="text-neutral-600">{t.home.loading}</p>
             </div>
           ) : todayEvents.length > 0 ? (
             <>
@@ -176,31 +182,33 @@ export default function HomePage() {
                 )}
               </div>
               <Button variant="outline" onClick={() => setEventOpen(true)}>
-                詳細を見る
+                {t.home.viewDetails}
               </Button>
             </>
           ) : (
             <div className="text-center py-8">
-              <p className="text-neutral-600">本日開催中のイベントはありません</p>
+              <p className="text-neutral-600">{t.home.noEvents}</p>
             </div>
           )}
         </CardContent>
       </Card>
 
-      <CraftGrid lang="ja" />
+      <CraftGrid lang={lang} />
 
       {todayEvents.length > 0 && (
-        <EventModal 
-          open={eventOpen} 
+        <EventModal
+          open={eventOpen}
           onClose={() => setEventOpen(false)}
           event={todayEvents[currentEventIndex]}
+          lang={lang}
         />
       )}
       {todayDemo && (
-        <DemoModal 
-          open={demoOpen} 
-          onClose={() => setDemoOpen(false)} 
+        <DemoModal
+          open={demoOpen}
+          onClose={() => setDemoOpen(false)}
           demo={todayDemo}
+          lang={lang}
         />
       )}
     </div>
