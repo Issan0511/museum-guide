@@ -21,6 +21,7 @@ export default function CraftPage({ params }: { params: Promise<{ id: string }> 
   const [loading, setLoading] = useState(true);
   const [missing, setMissing] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
+  const [aspectRatio, setAspectRatio] = useState(16 / 9);
   const { userProfile } = useUser();
   const lang = userProfile?.language ?? "ja";
   const t = useMemo(() => getTranslations(lang), [lang]);
@@ -99,7 +100,10 @@ export default function CraftPage({ params }: { params: Promise<{ id: string }> 
 
       <div>
         <h1 className="text-2xl font-bold mb-3">{title}</h1>
-        <div className="relative w-full aspect-[16/9] mb-3 rounded-lg overflow-hidden bg-gray-100">
+        <div
+          className="relative w-full mb-3 rounded-lg overflow-hidden bg-gray-100"
+          style={{ aspectRatio: aspectRatio }}
+        >
           <Image
             src={hero}
             alt={title}
@@ -107,6 +111,11 @@ export default function CraftPage({ params }: { params: Promise<{ id: string }> 
             className="object-cover"
             sizes="(max-width: 768px) 100vw, 400px"
             unoptimized={hero.includes("supabase.co")}
+            onLoadingComplete={(img) => {
+              if (img.naturalWidth && img.naturalHeight) {
+                setAspectRatio(img.naturalWidth / img.naturalHeight);
+              }
+            }}
           />
         </div>
         <p className="text-sm leading-relaxed text-neutral-700">{pickLang(item.description, lang) ?? ""}</p>
