@@ -1,8 +1,10 @@
 // Museum Guide - Type Definitions
-// Centralized type definitions for craft items, demos, events, chat, and common utilities.
+// Simplified craft-focused types for API usage.
+
+import { z } from 'zod';
 
 // ---------- 1) Core types ----------
-export type Lang = 'ja' | 'en' | 'zh';
+export type Lang = 'ja' | 'en' | 'zh' | 'fr' | 'ko' | 'es';
 
 export type Multilang<T = string> = Partial<Record<Lang, T>> & { ja?: T }; // ja preferred fallback
 
@@ -48,20 +50,20 @@ export interface CraftItem {
 
 // ---------- 3) DemoTemplate ----------
 export interface DemoTemplate {
-  id: number;                  // 実演テンプレートの識別ID
-  name: string;                // 伝統工芸の名前
-  img: string;                 // storageのパス
-  description: string;         // 50字程度の一文
+  id: number;                  // demo template id
+  name: Multilang;             // demo name
+  img?: string;                // storage path
+  description: Multilang;      // up to ~50 chars per lang
 }
 
 // ---------- 4) EventTemplate ----------
 
 export interface Event {
   id: number;
-  name: string;
+  name: Multilang;
   startDate: Date;
   endDate: Date;
-  detail: string;
+  detail: Multilang;
 }
 
 // ---------- 5) Helpers ----------
@@ -76,13 +78,15 @@ export function pickLang<T>(ml: Multilang<T>, lang: Lang): T | undefined {
   return Object.values(ml).find((value): value is T => value !== undefined);
 }
 
-// ---------- 4) Optional: zod validation ----------
-import { z } from 'zod';
+// ---------- 6) Optional: zod validation ----------
 
 export const ML = z.object({
   ja: z.any().optional(),
   en: z.any().optional(),
-  zh: z.any().optional()
+  zh: z.any().optional(),
+  fr: z.any().optional(),
+  ko: z.any().optional(),
+  es: z.any().optional()
 }).partial();
 
 export const ImageAssetZ = z.object({
@@ -97,7 +101,7 @@ export const TextAssetZ = z.object({
 export const CraftItemZ = z.object({
   id: z.number().int().nonnegative(),
   slug: z.string().min(1),
-  name: ML.refine(v => !!(v.ja || v.en || v.zh), { message: 'name requires at least one lang' }),
+  name: ML.refine(v => Object.values(v).some(value => value !== undefined), { message: 'name requires at least one lang' }),
   kana: z.string().optional(),
   summary: ML,
   description: ML,
@@ -108,12 +112,12 @@ export const CraftItemZ = z.object({
 
 export const DemoTemplateZ = z.object({
   id: z.number().int().nonnegative(),
-  name: z.string().min(1),
-  img: z.string().min(1),
-  description: z.string().min(1).max(50)
+  name: ML,
+  img: z.string().min(1).optional(),
+  description: ML
 });
 
-// ---------- 6) Chat types ----------
+// ---------- 7) Chat types ----------
 
 export interface ChatMessage {
   role: 'user' | 'assistant' | 'system';

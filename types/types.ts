@@ -2,7 +2,7 @@
 // Centralized type definitions for craft items, demos, events, chat, and common utilities.
 
 // ---------- 1) Core types ----------
-export type Lang = 'ja' | 'en' | 'zh';
+export type Lang = 'ja' | 'en' | 'zh' | 'fr' | 'ko' | 'es';
 
 export type Multilang<T = string> = Partial<Record<Lang, T>> & { ja?: T }; // ja preferred fallback
 
@@ -30,6 +30,7 @@ export interface CraftItem {
   slug: string;               // URL-safe id: e.g. "nishijin-ori"
 
   name: Multilang;            // display name
+
   kana?: string;              // optional reading for JA
 
   summary: Multilang;         // 1 paragraph overview
@@ -50,6 +51,7 @@ export interface CraftItem {
 export interface DemoTemplate {
   id: number;                  // 実演テンプレートの識別ID
   name: Multilang;             // 伝統工芸の名前
+  img?: string;                // optional storage path
   description: Multilang;      // 50字程度の一文
   // 画像パスは demo_images/${id}.png として自動生成
 }
@@ -82,7 +84,10 @@ import { z } from 'zod';
 export const ML = z.object({
   ja: z.any().optional(),
   en: z.any().optional(),
-  zh: z.any().optional()
+  zh: z.any().optional(),
+  fr: z.any().optional(),
+  ko: z.any().optional(),
+  es: z.any().optional()
 }).partial();
 
 export const ImageAssetZ = z.object({
@@ -97,7 +102,7 @@ export const TextAssetZ = z.object({
 export const CraftItemZ = z.object({
   id: z.number().int().nonnegative(),
   slug: z.string().min(1),
-  name: ML.refine(v => !!(v.ja || v.en || v.zh), { message: 'name requires at least one lang' }),
+  name: ML.refine(v => Object.values(v).some(value => value !== undefined), { message: 'name requires at least one lang' }),
   kana: z.string().optional(),
   summary: ML,
   description: ML,
@@ -108,9 +113,9 @@ export const CraftItemZ = z.object({
 
 export const DemoTemplateZ = z.object({
   id: z.number().int().nonnegative(),
-  name: z.string().min(1),
-  img: z.string().min(1),
-  description: z.string().min(1).max(50)
+  name: ML,
+  img: z.string().min(1).optional(),
+  description: ML
 });
 
 // ---------- 6) Chat types ----------
@@ -140,7 +145,7 @@ export type AgeGroup = 9 | 16 | 20 | 30 | 40 | 50 | 60 | 70 | 80;
 /**
  * Language preference (same as Lang but kept separate for user context)
  */
-export type UserLanguage = 'ja' | 'en' | 'zh';
+export type UserLanguage = Lang;
 
 /**
  * User profile/preferences
@@ -179,7 +184,7 @@ export const AgeGroupZ = z.union([
   z.literal(80)
 ]);
 
-export const UserLanguageZ = z.enum(['ja', 'en', 'zh']);
+export const UserLanguageZ = z.enum(['ja', 'en', 'zh', 'fr', 'ko', 'es']);
 
 export const UserProfileZ = z.object({
   age: AgeGroupZ,

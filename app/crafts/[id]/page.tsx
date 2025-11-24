@@ -203,7 +203,7 @@ export default function CraftPage({ params }: { params: Promise<{ id: string }> 
           <path d="M4 4h16v10H7l-3 3V4z" />
         </svg>
       </Button>
-      <ChatbotModal open={chatOpen} onClose={() => setChatOpen(false)} craftSlug={item?.slug || ""} />
+      <ChatbotModal open={chatOpen} onClose={() => setChatOpen(false)} craftSlug={item?.slug || ""} craftName={title} lang={lang} />
     </div>
   );
 }

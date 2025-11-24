@@ -5,11 +5,14 @@ import { Button } from "@/components/ui/button";
 import { ChatMessage } from "@/types/types";
 import { useUser } from "@/contexts/UserContext";
 import { getLocale, getTranslations } from "@/lib/i18n";
+import type { UserLanguage } from "@/types/types";
 
 interface ChatbotModalProps {
   open: boolean;
   onClose: () => void;
   craftSlug?: string;
+  craftName?: string;
+  lang?: string;
 }
 
 // 簡易的なフォーマット関数
@@ -22,14 +25,14 @@ function formatMessage(content: string): React.ReactNode {
   );
 }
 
-export default function ChatbotModal({ open, onClose, craftSlug }: ChatbotModalProps) {
+export default function ChatbotModal({ open, onClose, craftSlug, craftName, lang: langProp }: ChatbotModalProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [text, setText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { userProfile } = useUser();
-  const lang = userProfile?.language ?? "ja";
-  const t = getTranslations(lang);
-  const locale = getLocale(lang);
+  const lang = langProp || userProfile?.language || "ja";
+  const t = getTranslations(lang as UserLanguage);
+  const locale = getLocale(lang as UserLanguage);
 
   if (!open) return null;
 
@@ -167,14 +170,20 @@ export default function ChatbotModal({ open, onClose, craftSlug }: ChatbotModalP
           ×
         </Button>
         <CardHeader className="pb-3 border-b">
-          <CardTitle className="text-base">{t.chatbot.title}</CardTitle>
+          <CardTitle className="text-base">{craftName ? `${craftName} チャットボット` : t.chatbot.title}</CardTitle>
         </CardHeader>
         <CardContent className="flex-1 p-3 bg-neutral-50 overflow-auto">
           {messages.length === 0 ? (
             <div className="text-sm text-neutral-600 space-y-2">
-              {t.chatbot.intro.map((line, index) => (
-                <p key={index}>{line}</p>
-              ))}
+              {craftName ? (
+                t.chatbot.craftIntro.map((line, index) => (
+                  <p key={index}>{line.replace('{craftName}', craftName)}</p>
+                ))
+              ) : (
+                t.chatbot.intro.map((line, index) => (
+                  <p key={index}>{line}</p>
+                ))
+              )}
             </div>
           ) : (
             <div className="space-y-3">
