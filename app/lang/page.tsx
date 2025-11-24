@@ -84,25 +84,39 @@ export default function LangPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h2 className="text-lg font-semibold mb-1">{t.langPage.ageHeading}</h2>
-        <p className="text-sm text-neutral-600 mb-4">{t.langPage.ageSubheading}</p>
+        <h2 className="text-lg font-semibold mb-1">年齢を選択</h2>
+        <p className="text-sm text-neutral-600 mb-4">Choose your age range</p>
         <Select value={age ? age.toString() : ""} onValueChange={handleAgeChange}>
           <SelectTrigger className="w-44 h-12 bg-white border-neutral-300 rounded-xl shadow-sm">
             <SelectValue placeholder={t.langPage.agePlaceholder} />
           </SelectTrigger>
           <SelectContent>
-            {ageGroups.map((value) => (
-              <SelectItem key={value} value={value.toString()}>
-                {t.langPage.ageLabels[value.toString()] ?? value.toString()}
-              </SelectItem>
-            ))}
+            {ageGroups.map((value) => {
+              let label = "";
+              switch (value) {
+                case 9: label = "0-12"; break;
+                case 16: label = "12-18"; break;
+                case 20: label = "18-29"; break;
+                case 30: label = "30-39"; break;
+                case 40: label = "40-49"; break;
+                case 50: label = "50-59"; break;
+                case 60: label = "60-69"; break;
+                case 70: label = "70-79"; break;
+                case 80: label = "80+"; break;
+              }
+              return (
+                <SelectItem key={value} value={value.toString()}>
+                  {label}
+                </SelectItem>
+              );
+            })}
           </SelectContent>
         </Select>
       </div>
 
       <div>
-        <h2 className="text-lg font-semibold mb-1">{t.langPage.languageHeading}</h2>
-        <p className="text-sm text-neutral-600 mb-4">{t.langPage.languageSubheading}</p>
+        <h2 className="text-lg font-semibold mb-1">言語を選択</h2>
+        <p className="text-sm text-neutral-600 mb-4">Select your language</p>
         <div className="grid grid-cols-3 gap-3">
           {languageOptions.map((option) => (
             <Button
