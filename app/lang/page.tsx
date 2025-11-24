@@ -132,6 +132,43 @@ export default function LangPage() {
           ))}
         </div>
       </div>
+
+      <div id="c5" className="p-8 bg-gray-100 text-center mt-8">
+        <p>今後の活動や運営の参考にさせていただきますので、以下のアンケートにご協力いただきますようお願いいたします。</p>
+        <div className="link relative w-4/5 border border-gray-600 p-3 mx-auto mb-2 box-border">
+          <span className="float-left">アンケート回答ページへ<i className="fa-solid fa-arrow-up-right-from-square pl-2 text-gray-600"></i></span>
+          <span className="float-right">＞</span>
+          <div className="clear-both"></div>
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSeJ9z_GvkaIylTve1q-s3jizj-7xwdNEuRyDg1nLtRnp2DBsA/viewform?pli=1" target="_blank" rel="noopener noreferrer" className="absolute top-0 left-0 w-full h-full indent-[-9999px]">link</a>
+        </div>
+        <a href="https://kmtc.jp/" target="_blank" rel="noopener noreferrer">
+          <img src="/images/museum_logo_lang.png" alt="Museum Logo" className="block mx-auto mt-8 w-[80%]" />
+        </a>
+        <a href="https://mocad-shop.com/" target="_blank" rel="noopener noreferrer">
+          <img src="/images/mocad_shop_logo.png" alt="MOCAD Shop Logo" className="block mx-auto mt-8 w-[80%]" />
+        </a>
+        <div id="sns" className="px-4 mt-8 box-border">
+          <div className="icon_sns relative w-[calc(100%/3-8px)] float-left mx-1 text-center box-border">
+            <a href="https://twitter.com/Kyoto_Mocad" className="snsbtn inline-block bg-gray-800 text-white w-10 h-10 leading-10 rounded-full text-center no-underline transition duration-400 hover:bg-white hover:text-black hover:border hover:border-black" target="_blank" rel="noopener noreferrer" title="X">
+              <i className="fab fa-x-twitter"></i>
+            </a>
+            <p className="mt-1 font-bold text-xs">X</p>
+          </div>
+          <div className="icon_sns relative w-[calc(100%/3-8px)] float-left mx-1 text-center box-border">
+            <a href="https://www.facebook.com/KyotoMOCAD" className="snsbtn inline-block bg-gray-800 text-white w-10 h-10 leading-10 rounded-full text-center no-underline transition duration-400 hover:bg-white hover:text-black hover:border hover:border-black" target="_blank" rel="noopener noreferrer" title="Facebook">
+              <i className="fab fa-facebook-f"></i>
+            </a>
+            <p className="mt-1 font-bold text-xs">Facebook</p>
+          </div>
+          <div className="icon_sns relative w-[calc(100%/3-8px)] float-left mx-1 text-center box-border">
+            <a href="https://www.instagram.com/kyotomuseumofcraftsanddesign/" className="snsbtn inline-block bg-gray-800 text-white w-10 h-10 leading-10 rounded-full text-center no-underline transition duration-400 hover:bg-white hover:text-black hover:border hover:border-black" target="_blank" rel="noopener noreferrer" title="Instagram">
+              <i className="fab fa-instagram"></i>
+            </a>
+            <p className="mt-1 font-bold text-xs">Instagram</p>
+          </div>
+          <div className="clear-both"></div>
+        </div>
+      </div>
     </div>
   );
 }
