@@ -55,7 +55,7 @@ const translations: Record<UserLanguage, SectionTranslations> = {
   ja: {
     home: {
       backToLanguageSelection: "← 言語選択へ戻る",
-      todaysDemoTitle: "本日の工芸デモ",
+      todaysDemoTitle: "本日の実演",
       loading: "読み込み中...",
       viewDetails: "詳細を見る",
       noDemo: "本日のデモはありません",
@@ -121,7 +121,7 @@ const translations: Record<UserLanguage, SectionTranslations> = {
   en: {
     home: {
       backToLanguageSelection: "← Back to language selection",
-      todaysDemoTitle: "Today's craft demonstration",
+      todaysDemoTitle: "Today's performance",
       loading: "Loading...",
       viewDetails: "View details",
       noDemo: "No demonstration today",
@@ -187,7 +187,7 @@ const translations: Record<UserLanguage, SectionTranslations> = {
   zh: {
     home: {
       backToLanguageSelection: "← 返回语言选择",
-      todaysDemoTitle: "今日工艺演示",
+      todaysDemoTitle: "今日实演",
       loading: "加载中...",
       viewDetails: "查看详情",
       noDemo: "今日没有演示",
@@ -253,7 +253,7 @@ const translations: Record<UserLanguage, SectionTranslations> = {
   fr: {
     home: {
       backToLanguageSelection: "← Retour à la sélection de la langue",
-      todaysDemoTitle: "Démonstration du jour",
+      todaysDemoTitle: "Démonstration d'aujourd'hui",
       loading: "Chargement...",
       viewDetails: "Voir les détails",
       noDemo: "Aucune démonstration aujourd'hui",
@@ -319,7 +319,7 @@ const translations: Record<UserLanguage, SectionTranslations> = {
   ko: {
     home: {
       backToLanguageSelection: "← 언어 선택으로 돌아가기",
-      todaysDemoTitle: "오늘의 공예 시연",
+      todaysDemoTitle: "오늘의 실연",
       loading: "불러오는 중...",
       viewDetails: "자세히 보기",
       noDemo: "오늘은 시연이 없습니다",

@@ -134,7 +134,10 @@ export default function LangPage() {
       </div>
 
       <div id="c5" className="p-8 bg-gray-100 text-center mt-8">
-        <p>今後の活動や運営の参考にさせていただきますので、以下のアンケートにご協力いただきますようお願いいたします。</p>
+        <div className="text-left">
+          <p className="mb-1">今後の活動や運営の参考にさせていただきますので、以下のアンケートにご協力いただきますようお願いいたします。</p>
+          <p>Please fill out the survey form below.</p>
+        </div>
         <div className="link relative w-4/5 border border-gray-600 p-3 mx-auto mb-2 box-border">
           <span className="float-left">アンケート回答ページへ<i className="fa-solid fa-arrow-up-right-from-square pl-2 text-gray-600"></i></span>
           <span className="float-right">＞</span>
