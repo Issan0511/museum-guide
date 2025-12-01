@@ -2,9 +2,8 @@ import { NextRequest } from "next/server";
 import OpenAI from "openai";
 import { SEED } from "@/data/crafts.seed";
 import type { CraftItem } from "@/types/craft";
-import { pickLang } from "@/types/craft";
 import type { UserProfile } from "@/types/types";
-import { getPublicUrl } from "@/lib/supabasePublic";
+import { buildSystemPrompt } from "@/lib/chatPrompts";
 
 export const runtime = "nodejs";
 
@@ -19,57 +18,12 @@ export async function POST(req: NextRequest) {
     });
   }
 
-  let systemPrompt =
-    "あなたは博物館の案内チャットボットです。日本語で丁寧に対応してください。博物館の展示品、工芸品、イベント、施設について案内することができます。インターネットには接続されていません。max_completion_tokens が2000なので、必要な情報のみを回答してください";
-
-  // ユーザーの年齢層に応じて話し方を調整
-  if (userProfile && userProfile.age) {
-    if (userProfile.age === 9) {
-      // 12歳以下：小学生向け
-      systemPrompt += "\n\nユーザーは小学生です。わかりやすい言葉を使い、難しい漢字はひらがなで説明し、楽しく親しみやすい口調で話してください。";
-    } else if (userProfile.age === 16) {
-      // 13-17歳：中高生向け
-      systemPrompt += "\n\nユーザーは中高生です。丁寧でありながらもフレンドリーな口調で、興味を引くような説明を心がけてください。";
-    } else {
-      // 18歳以上：通常の大人向け
-      systemPrompt += "\n\nユーザーは大人です。";
-    }
-  }
-
+  let craftItem: CraftItem | undefined;
   if (craftSlug) {
-    const craftItem = (SEED as CraftItem[]).find((c) => c.slug === craftSlug);
-    if (craftItem) {
-      const name = pickLang(craftItem.name, "ja");
-      const summary = pickLang(craftItem.summary, "ja");
-      const desc = pickLang(craftItem.description, "ja");
-
-      systemPrompt += `
-
-現在、あなたは「${name}」の詳細ページにいるユーザーと話しています。
-工芸品情報：
-- 名前: ${name}
-- 概要: ${summary}
-- 詳細: ${desc}`;
-
-      try {
-        const mdUrl = getPublicUrl(`craft_texts/${craftItem.id}.md`);
-        const response = await fetch(mdUrl);
-        if (response.ok) {
-          const md = await response.text();
-          systemPrompt += `
-
-以下は${name}に関する詳細な展示情報です：
-${md}`;
-        }
-      } catch {
-        // MD無しは無視
-      }
-
-      systemPrompt += `
-
-この工芸品について詳しく説明し、ユーザーの質問に答えてください。`;
-    }
+    craftItem = (SEED as CraftItem[]).find((c) => c.slug === craftSlug);
   }
+
+  const systemPrompt = await buildSystemPrompt(userProfile, craftItem);
 
   const stream = new ReadableStream({
     async start(controller) {
