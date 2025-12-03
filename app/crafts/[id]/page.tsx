@@ -29,7 +29,7 @@ export default function CraftPage({ params }: { params: Promise<{ id: string }> 
   const logEvent = async (craftId: number, eventType: 'view' | 'shop_click', targetUrl?: string) => {
     if (!visitId) return;
 
-    const { error } = await supabase.from('craft_events').insert({
+    const { error } = await supabase.from('craft_logs').insert({
       visit_id: visitId,
       craft_id: craftId,
       event_type: eventType,
