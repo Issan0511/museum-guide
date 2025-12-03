@@ -6,12 +6,14 @@ import { ChatMessage } from "@/types/types";
 import { useUser } from "@/contexts/UserContext";
 import { getLocale, getTranslations } from "@/lib/i18n";
 import type { UserLanguage } from "@/types/types";
+import { supabase } from "@/lib/supabase";
 
 interface ChatbotModalProps {
   open: boolean;
   onClose: () => void;
   craftSlug?: string;
   craftName?: string;
+  craftId?: number;
   lang?: string;
 }
 
@@ -25,11 +27,11 @@ function formatMessage(content: string): React.ReactNode {
   );
 }
 
-export default function ChatbotModal({ open, onClose, craftSlug, craftName, lang: langProp }: ChatbotModalProps) {
+export default function ChatbotModal({ open, onClose, craftSlug, craftName, craftId, lang: langProp }: ChatbotModalProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [text, setText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { userProfile } = useUser();
+  const { userProfile, visitId } = useUser();
   const lang = langProp || userProfile?.language || "ja";
   const t = getTranslations(lang as UserLanguage);
   const locale = getLocale(lang as UserLanguage);
@@ -48,6 +50,22 @@ export default function ChatbotModal({ open, onClose, craftSlug, craftName, lang
     setMessages((prev) => [...prev, userMessage]);
     setText("");
     setIsLoading(true);
+
+    // Log chat to Supabase
+    if (visitId) {
+      supabase.from('chat_logs').insert({
+        visit_id: visitId,
+        craft_id: craftId || null,
+        source: 'app',
+        language_ui: lang,
+        question_text: text,
+        user_id_hash: null
+      }).then(({ error }) => {
+        if (error) {
+          console.error('Error logging chat:', error);
+        }
+      });
+    }
 
     try {
       const response = await fetch('/api/chat', {

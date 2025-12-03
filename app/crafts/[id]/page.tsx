@@ -22,9 +22,31 @@ export default function CraftPage({ params }: { params: Promise<{ id: string }> 
   const [missing, setMissing] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
   const [aspectRatio, setAspectRatio] = useState(16 / 9);
-  const { userProfile } = useUser();
+  const { userProfile, visitId } = useUser();
   const lang = userProfile?.language ?? "ja";
   const t = useMemo(() => getTranslations(lang), [lang]);
+
+  const logEvent = async (craftId: number, eventType: 'view' | 'shop_click', targetUrl?: string) => {
+    if (!visitId) return;
+
+    const { error } = await supabase.from('craft_events').insert({
+      visit_id: visitId,
+      craft_id: craftId,
+      event_type: eventType,
+      target_url: targetUrl || null,
+      source: 'app'
+    });
+
+    if (error) {
+      console.error('Error logging event:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (item?.id && visitId) {
+      logEvent(item.id, 'view');
+    }
+  }, [item?.id, visitId]);
 
   useEffect(() => {
     if (Number.isNaN(numericId)) {
@@ -154,6 +176,7 @@ export default function CraftPage({ params }: { params: Promise<{ id: string }> 
               rel="noopener noreferrer"
               className="block"
               aria-label={t.craftPage.shopPrimaryAria}
+              onClick={() => logEvent(item.id, 'shop_click', `https://mocad-shop.com/collections/${item.shopCollection}`)}
             >
               <div className="relative w-full h-32 mx-auto hover:opacity-80 transition-opacity cursor-pointer">
                 <Image
@@ -180,6 +203,7 @@ export default function CraftPage({ params }: { params: Promise<{ id: string }> 
               rel="noopener noreferrer"
               className="block"
               aria-label={t.craftPage.shopOtherAria}
+              onClick={() => logEvent(item.id, 'shop_click', "https://mocad-shop.com/")}
             >
               <div className="relative w-full h-32 mx-auto hover:opacity-80 transition-opacity cursor-pointer">
                 <Image
@@ -203,7 +227,14 @@ export default function CraftPage({ params }: { params: Promise<{ id: string }> 
           <path d="M4 4h16v10H7l-3 3V4z" />
         </svg>
       </Button>
-      <ChatbotModal open={chatOpen} onClose={() => setChatOpen(false)} craftSlug={item?.slug || ""} craftName={title} lang={lang} />
+      <ChatbotModal 
+        open={chatOpen} 
+        onClose={() => setChatOpen(false)} 
+        craftSlug={item?.slug || ""} 
+        craftName={title} 
+        craftId={item?.id}
+        lang={lang} 
+      />
     </div>
   );
 }

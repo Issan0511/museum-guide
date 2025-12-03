@@ -19,7 +19,7 @@ const languageOptions: { value: UserLanguage; label: string }[] = [
 ];
 
 export default function LangPage() {
-  const { userProfile, setUserProfile } = useUser();
+  const { userProfile, setUserProfile, initializeVisit } = useUser();
   const [age, setAge] = useState<AgeGroup | null>(userProfile?.age ?? null);
   const [language, setLanguage] = useState<UserLanguage | "">(userProfile?.language ?? "");
   const [isNavigating, setIsNavigating] = useState(false);
@@ -46,6 +46,7 @@ export default function LangPage() {
     if (age && lang) {
       setIsNavigating(true);
       setUserProfile({ age, language: lang });
+      initializeVisit();
 
       // Add a small delay for better UX
       setTimeout(() => {
@@ -62,6 +63,7 @@ export default function LangPage() {
     if (language) {
       setIsNavigating(true);
       setUserProfile({ age: ageValue, language });
+      initializeVisit();
 
       // Add a small delay for better UX
       setTimeout(() => {
