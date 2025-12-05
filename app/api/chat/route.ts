@@ -42,6 +42,7 @@ export async function POST(req: NextRequest) {
             ...messages,
           ],
           max_completion_tokens: 5000,
+          reasoning_effort : "low",
         });
 
         let fullResponse = '';
