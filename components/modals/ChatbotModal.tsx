@@ -8,6 +8,43 @@ import { getLocale, getTranslations } from "@/lib/i18n";
 import type { UserLanguage } from "@/types/types";
 import { supabase } from "@/lib/supabase";
 
+const INTENT_KEYS = [
+  'material',        // 素材・原料・道具・耐久性
+  'history',         // 歴史・起源・文化背景
+  'process',         // 技法・工程・作り方
+  'price',           // 販売価格・料金
+  'products',        // 工芸品を用いた製品
+  'other_craft',     // その他工芸品について
+  'purchase',        // 購入場所・店舗・オンライン購入
+  'experience',      // ワークショップ・体験・所要時間
+  'access_location', // 展示場所・工房所在地・アクセス方法
+  'facility_rules',  // 撮影可否・開館時間・ルール・サービス
+  'child_beginner',  // 初心者向け・子ども向け・対象年齢
+  'other'            // その他(分類不能)
+] as const;
+
+type IntentKey = typeof INTENT_KEYS[number];
+
+async function classifyIntent(question: string): Promise<IntentKey> {
+  try {
+    const response = await fetch('/api/classify-intent', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ question })
+    });
+    if (response.ok) {
+      const data = await response.json();
+      const { intent } = data;
+      if (INTENT_KEYS.includes(intent)) {
+        return intent;
+      }
+    }
+  } catch (e) {
+    console.error('[Intent Classification] Failed:', e);
+  }
+  return 'other';
+}
+
 interface ChatbotModalProps {
   open: boolean;
   onClose: () => void;
@@ -51,19 +88,22 @@ export default function ChatbotModal({ open, onClose, craftSlug, craftName, craf
     setText("");
     setIsLoading(true);
 
-    // Log chat to Supabase
+    // Log chat to Supabase with intent classification
     if (visitId) {
-      supabase.from('chat_logs').insert({
-        visit_id: visitId,
-        craft_id: craftId || null,
-        source: 'app',
-        language_ui: lang,
-        question_text: text,
-        user_id_hash: null
-      }).then(({ error }) => {
-        if (error) {
-          console.error('Error logging chat:', error);
-        }
+      classifyIntent(text).then((intent) => {
+        supabase.from('chat_logs').insert({
+          visit_id: visitId,
+          craft_id: craftId || null,
+          source: 'app',
+          language_ui: lang,
+          question_text: text,
+          user_id_hash: null,
+          intent: intent
+        }).then(({ error }) => {
+          if (error) {
+            console.error('Error logging chat:', error);
+          }
+        });
       });
     }
 
