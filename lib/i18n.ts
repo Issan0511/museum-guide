@@ -59,8 +59,8 @@ const translations: Record<UserLanguage, SectionTranslations> = {
       loading: "読み込み中...",
       viewDetails: "詳細を見る",
       noDemo: "本日のデモはありません",
-      eventsTitle: "本日開催のイベント",
-      noEvents: "本日開催のイベントはありません"
+      eventsTitle: "本日開催中のイベント",
+      noEvents: "本日開催中のイベントはありません"
     },
     demoModal: {
       title: "工芸デモ",
