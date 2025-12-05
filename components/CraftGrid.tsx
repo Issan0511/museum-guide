@@ -75,9 +75,9 @@ export default function CraftGrid({ lang = "ja" }: Props) {
             <button
               key={item.id}
               onClick={() => router.push(`/crafts/${item.id}`)}
-              className="bg-neutral-50 border border-neutral-200 rounded-lg p-2.5 hover:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:ring-offset-2 transition-colors"
+              className="bg-neutral-50 border border-neutral-200 rounded-lg p-2.5 hover:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:ring-offset-2 transition-colors flex flex-col"
             >
-              <div className="relative w-full aspect-[4/3] mb-2 rounded overflow-hidden bg-gray-100">
+              <div className="relative w-full aspect-[4/3] mb-2 rounded overflow-hidden bg-gray-100 flex-shrink-0">
                 <Image
                   src={item.imageUrl}
                   alt={item.name}
@@ -87,7 +87,7 @@ export default function CraftGrid({ lang = "ja" }: Props) {
                   unoptimized={item.imageUrl.includes("supabase.co")}
                 />
               </div>
-              <div className="text-center">
+              <div className="text-center break-all">
                 <div className="font-semibold text-sm">{item.name}</div>
                 {item.reading ? <div className="text-xs text-neutral-600">{item.reading}</div> : null}
               </div>
