@@ -19,7 +19,7 @@ const INTENT_KEYS = [
   'experience',      // ワークショップ・体験・所要時間
   'access_location', // 展示場所・工房所在地・アクセス方法
   'facility_rules',  // 撮影可否・開館時間・ルール・サービス
-  'child_beginner',  // 初心者向け・子ども向け・対象年齢
+  'child_beginner',  // 初心者向け・子ども向け・対象年代
   'other'            // その他(分類不能)
 ] as const;
 

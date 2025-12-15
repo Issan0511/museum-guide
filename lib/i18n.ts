@@ -83,8 +83,8 @@ const translations: Record<UserLanguage, SectionTranslations> = {
       shopOtherAria: "MOCADショップで他の工芸品を見る"
     },
     langPage: {
-      ageHeading: "年齢を選択",
-      ageSubheading: "年齢層を選んでください",
+      ageHeading: "年代を選択",
+      ageSubheading: "年代を選んでください",
       agePlaceholder: "選択してください",
       languageHeading: "言語を選択",
       languageSubheading: "ご希望の言語を選んでください",

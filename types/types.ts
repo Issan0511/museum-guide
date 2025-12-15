@@ -29,6 +29,9 @@ export interface CraftItem {
   id: number;                 // stable numeric id
   slug: string;               // URL-safe id: e.g. "nishijin-ori"
 
+  /** Used for ordering/grouping in CraftGrid (e.g. 100s=住, 200s=礼, ...) */
+  displayOrder?: number;
+
   name: Multilang;            // display name
 
   kana?: string;              // optional reading for JA
@@ -102,6 +105,7 @@ export const TextAssetZ = z.object({
 export const CraftItemZ = z.object({
   id: z.number().int().nonnegative(),
   slug: z.string().min(1),
+  displayOrder: z.number().int().optional(),
   name: ML.refine(v => Object.values(v).some(value => value !== undefined), { message: 'name requires at least one lang' }),
   kana: z.string().optional(),
   summary: ML,

@@ -3,6 +3,7 @@ import type { CraftItem, DemoTemplate, Event, Multilang } from "@/types/types";
 export type CraftRow = {
   id: number;
   slug: string;
+  display_order: number | null;
   name_ja: string | null;
   name_en: string | null;
   name_zh: string | null;
@@ -54,6 +55,7 @@ export function mapCraftRow(row: CraftRow): CraftItem {
   return {
     id: row.id,
     slug: row.slug,
+    displayOrder: row.display_order ?? undefined,
     name: toMultilang({
       ja: row.name_ja ?? undefined,
       en: row.name_en ?? undefined,

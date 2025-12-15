@@ -11,7 +11,7 @@ const BASE_PROMPT =
   "3. 字数がもったいないので、この指示を守った旨や「承知しました」などの前置きは表示しないでください。";
 
 /**
- * ユーザーの年齢層に応じて話し方を調整したプロンプトを生成
+ * ユーザーの年代に応じて話し方を調整したプロンプトを生成
  */
 function getAgeAdjustedPrompt(basePrompt: string, userProfile?: UserProfile): string {
   if (!userProfile || !userProfile.age) {

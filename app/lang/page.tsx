@@ -86,7 +86,7 @@ export default function LangPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h2 className="text-lg font-semibold mb-1">年齢を選択</h2>
+        <h2 className="text-lg font-semibold mb-1">年代を選択</h2>
         <p className="text-sm text-neutral-600 mb-4">Choose your age range</p>
         <Select value={age ? age.toString() : ""} onValueChange={handleAgeChange}>
           <SelectTrigger className="w-44 h-12 bg-white border-neutral-300 rounded-xl shadow-sm">
@@ -154,10 +154,10 @@ export default function LangPage() {
         </a>
         <div id="sns" className="px-4 mt-8 box-border">
           <div className="icon_sns relative w-[calc(100%/3-8px)] float-left mx-1 text-center box-border">
-            <a href="https://twitter.com/Kyoto_Mocad" className="snsbtn inline-block bg-gray-800 text-white w-10 h-10 leading-10 rounded-full text-center no-underline transition duration-400 hover:bg-white hover:text-black hover:border hover:border-black" target="_blank" rel="noopener noreferrer" title="X">
-              <i className="fab fa-x-twitter"></i>
+            <a href="https://www.instagram.com/kyotomuseumofcraftsanddesign/" className="snsbtn inline-block bg-gray-800 text-white w-10 h-10 leading-10 rounded-full text-center no-underline transition duration-400 hover:bg-white hover:text-black hover:border hover:border-black" target="_blank" rel="noopener noreferrer" title="Instagram">
+              <i className="fab fa-instagram"></i>
             </a>
-            <p className="mt-1 font-bold text-xs">X</p>
+            <p className="mt-1 font-bold text-xs">Instagram</p>
           </div>
           <div className="icon_sns relative w-[calc(100%/3-8px)] float-left mx-1 text-center box-border">
             <a href="https://www.facebook.com/KyotoMOCAD" className="snsbtn inline-block bg-gray-800 text-white w-10 h-10 leading-10 rounded-full text-center no-underline transition duration-400 hover:bg-white hover:text-black hover:border hover:border-black" target="_blank" rel="noopener noreferrer" title="Facebook">
@@ -166,10 +166,10 @@ export default function LangPage() {
             <p className="mt-1 font-bold text-xs">Facebook</p>
           </div>
           <div className="icon_sns relative w-[calc(100%/3-8px)] float-left mx-1 text-center box-border">
-            <a href="https://www.instagram.com/kyotomuseumofcraftsanddesign/" className="snsbtn inline-block bg-gray-800 text-white w-10 h-10 leading-10 rounded-full text-center no-underline transition duration-400 hover:bg-white hover:text-black hover:border hover:border-black" target="_blank" rel="noopener noreferrer" title="Instagram">
-              <i className="fab fa-instagram"></i>
+            <a href="https://twitter.com/Kyoto_Mocad" className="snsbtn inline-block bg-gray-800 text-white w-10 h-10 leading-10 rounded-full text-center no-underline transition duration-400 hover:bg-white hover:text-black hover:border hover:border-black" target="_blank" rel="noopener noreferrer" title="X">
+              <i className="fab fa-x-twitter"></i>
             </a>
-            <p className="mt-1 font-bold text-xs">Instagram</p>
+            <p className="mt-1 font-bold text-xs">X</p>
           </div>
           <div className="clear-both"></div>
         </div>
