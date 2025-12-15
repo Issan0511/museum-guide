@@ -41,12 +41,12 @@ export default function CraftGrid({ lang = "ja" }: Props) {
   const [crafts, setCrafts] = useState<CraftItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [openCategories, setOpenCategories] = useState<Record<CraftCategory, boolean>>({
-    "住": true,
-    "礼": true,
-    "食": true,
-    "職": true,
-    "衣": true,
-    "その他": true
+    "住": false,
+    "礼": false,
+    "食": false,
+    "職": false,
+    "衣": false,
+    "その他": false
   });
 
   useEffect(() => {
