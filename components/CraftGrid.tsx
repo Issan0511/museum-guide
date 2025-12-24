@@ -27,15 +27,6 @@ function categoryFromDisplayOrder(displayOrder?: number): CraftCategory {
   return "その他";
 }
 
-function categoryHeading(category: CraftCategory): string {
-  if (category === "住") return "カテゴリー住";
-  if (category === "礼") return "カテゴリー礼";
-  if (category === "食") return "カテゴリー食";
-  if (category === "職") return "カテゴリー職";
-  if (category === "衣") return "カテゴリー衣";
-  return "その他";
-}
-
 export default function CraftGrid({ lang = "ja" }: Props) {
   const router = useRouter();
   const [crafts, setCrafts] = useState<CraftItem[]>([]);
@@ -103,10 +94,10 @@ export default function CraftGrid({ lang = "ja" }: Props) {
 
     return CATEGORY_ORDER.map((category) => ({
       category,
-      heading: categoryHeading(category),
+      heading: t.craftGrid.categoryLabels[category],
       items: groups[category]
     })).filter((group) => group.items.length > 0);
-  }, [crafts, lang]);
+  }, [crafts, lang, t]);
 
   return (
     <div className="space-y-6">
