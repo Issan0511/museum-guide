@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useState, useEffect, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -198,6 +199,16 @@ export default function HomePage() {
       </Card>
 
       <CraftGrid lang={lang} />
+
+      <div className="mt-8 pt-4 border-t border-neutral-200 text-center text-sm text-neutral-600 space-x-4">
+        <Link href="/legal/terms" className="hover:text-neutral-900 underline">
+          {t.home.termsOfUse}
+        </Link>
+        <span>|</span>
+        <Link href="/legal/privacy" className="hover:text-neutral-900 underline">
+          {t.home.privacyPolicy}
+        </Link>
+      </div>
 
       {todayEvents.length > 0 && (
         <EventModal

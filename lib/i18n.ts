@@ -9,6 +9,8 @@ export type SectionTranslations = {
     noDemo: string;
     eventsTitle: string;
     noEvents: string;
+    termsOfUse: string;
+    privacyPolicy: string;
   };
   demoModal: {
     title: string;
@@ -61,7 +63,9 @@ const translations: Record<UserLanguage, SectionTranslations> = {
       viewDetails: "詳細を見る",
       noDemo: "本日のデモはありません",
       eventsTitle: "本日開催中のイベント",
-      noEvents: "本日開催中のイベントはありません"
+      noEvents: "本日開催中のイベントはありません",
+      termsOfUse: "利用規約",
+      privacyPolicy: "プライバシーポリシー"
     },
     demoModal: {
       title: "工芸デモ",
@@ -135,7 +139,9 @@ const translations: Record<UserLanguage, SectionTranslations> = {
       viewDetails: "View details",
       noDemo: "No demonstration today",
       eventsTitle: "Events happening today",
-      noEvents: "No events are happening today"
+      noEvents: "No events are happening today",
+      termsOfUse: "Terms of Use",
+      privacyPolicy: "Privacy Policy"
     },
     demoModal: {
       title: "Craft demonstration",
@@ -209,7 +215,9 @@ const translations: Record<UserLanguage, SectionTranslations> = {
       viewDetails: "查看详情",
       noDemo: "今日没有演示",
       eventsTitle: "今日正在进行的活动",
-      noEvents: "今日没有进行的活动"
+      noEvents: "今日没有进行的活动",
+      termsOfUse: "使用条款",
+      privacyPolicy: "隐私政策"
     },
     demoModal: {
       title: "工艺演示",
@@ -283,7 +291,9 @@ const translations: Record<UserLanguage, SectionTranslations> = {
       viewDetails: "Voir les détails",
       noDemo: "Aucune démonstration aujourd'hui",
       eventsTitle: "Événements du jour",
-      noEvents: "Aucun événement aujourd'hui"
+      noEvents: "Aucun événement aujourd'hui",
+      termsOfUse: "Conditions d'utilisation",
+      privacyPolicy: "Politique de Confidentialité"
     },
     demoModal: {
       title: "Démonstration d'artisanat",
@@ -357,7 +367,9 @@ const translations: Record<UserLanguage, SectionTranslations> = {
       viewDetails: "자세히 보기",
       noDemo: "오늘은 시연이 없습니다",
       eventsTitle: "오늘 진행 중인 이벤트",
-      noEvents: "오늘 진행 중인 이벤트가 없습니다"
+      noEvents: "오늘 진행 중인 이벤트가 없습니다",
+      termsOfUse: "이용 약관",
+      privacyPolicy: "개인정보 처리방침"
     },
     demoModal: {
       title: "공예 시연",
@@ -431,7 +443,9 @@ const translations: Record<UserLanguage, SectionTranslations> = {
       viewDetails: "Ver detalles",
       noDemo: "No hay demostración hoy",
       eventsTitle: "Eventos de hoy",
-      noEvents: "No hay eventos hoy"
+      noEvents: "No hay eventos hoy",
+      termsOfUse: "Términos de Uso",
+      privacyPolicy: "Política de Privacidad"
     },
     demoModal: {
       title: "Demostración de artesanía",
