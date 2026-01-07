@@ -358,7 +358,7 @@ const translations: Record<UserLanguage, SectionTranslations> = {
       sending: "Envoi...",
       error: "Une erreur s'est produite. Merci de réessayer."
     }
-  }
+  },
   ko: {
     home: {
       backToLanguageSelection: "← 언어 선택으로 돌아가기",

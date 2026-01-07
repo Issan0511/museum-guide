@@ -54,12 +54,34 @@ interface ChatbotModalProps {
   lang?: string;
 }
 
-// 簡易的なフォーマット関数
+// URLをクリック可能なリンクに変換する関数
 function formatMessage(content: string): React.ReactNode {
-  // 改行を保持して表示
+  // URL正規表現パターン
+  const urlPattern = /(https?:\/\/[^\s<>"{}|\\^`\[\]]+)/g;
+  
+  // テキストをURLとそれ以外に分割
+  const parts = content.split(urlPattern);
+  
   return (
     <pre className="whitespace-pre-wrap break-words font-sans text-sm m-0">
-      {content}
+      {parts.map((part, index) => {
+        if (urlPattern.test(part)) {
+          // URLの場合はリンクとして表示
+          return (
+            <a
+              key={index}
+              href={part}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 hover:text-blue-800 underline"
+            >
+              {part}
+            </a>
+          );
+        }
+        // 通常のテキストはそのまま表示
+        return part;
+      })}
     </pre>
   );
 }
