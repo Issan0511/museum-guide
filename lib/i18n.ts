@@ -134,7 +134,7 @@ const translations: Record<UserLanguage, SectionTranslations> = {
   en: {
     home: {
       backToLanguageSelection: "← Back to language selection",
-      todaysDemoTitle: "Today's performance",
+      todaysDemoTitle: "Today's demonstration",
       loading: "Loading...",
       viewDetails: "View details",
       noDemo: "No demonstration today",
@@ -210,7 +210,7 @@ const translations: Record<UserLanguage, SectionTranslations> = {
   zh: {
     home: {
       backToLanguageSelection: "← 返回语言选择",
-      todaysDemoTitle: "今日实演",
+      todaysDemoTitle: "今日演示",
       loading: "加载中...",
       viewDetails: "查看详情",
       noDemo: "今日没有演示",
@@ -293,7 +293,7 @@ const translations: Record<UserLanguage, SectionTranslations> = {
       eventsTitle: "Événements du jour",
       noEvents: "Aucun événement aujourd'hui",
       termsOfUse: "Conditions d'utilisation",
-      privacyPolicy: "Politique de Confidentialité"
+      privacyPolicy: "Politique de confidentialité"
     },
     demoModal: {
       title: "Démonstration d'artisanat",
@@ -358,7 +358,7 @@ const translations: Record<UserLanguage, SectionTranslations> = {
       sending: "Envoi...",
       error: "Une erreur s'est produite. Merci de réessayer."
     }
-  },
+  }
   ko: {
     home: {
       backToLanguageSelection: "← 언어 선택으로 돌아가기",
@@ -382,7 +382,7 @@ const translations: Record<UserLanguage, SectionTranslations> = {
       heading: "공예 목록",
       categoryLabels: {
         "住": "카테고리: 주거",
-        "礼": "카테고리: 예",
+        "礼": "카테고리: 예절",
         "食": "카테고리: 음식",
         "職": "카테고리: 직업",
         "衣": "카테고리: 의복",
@@ -444,8 +444,8 @@ const translations: Record<UserLanguage, SectionTranslations> = {
       noDemo: "No hay demostración hoy",
       eventsTitle: "Eventos de hoy",
       noEvents: "No hay eventos hoy",
-      termsOfUse: "Términos de Uso",
-      privacyPolicy: "Política de Privacidad"
+      termsOfUse: "Términos de uso",
+      privacyPolicy: "Política de privacidad"
     },
     demoModal: {
       title: "Demostración de artesanía",
