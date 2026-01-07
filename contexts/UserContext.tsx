@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect, ReactNode, useRef } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import type { UserProfile } from "@/types/types";
 
@@ -11,6 +11,7 @@ interface UserContextType {
   clearUserProfile: () => void;
   visitId: string | null;
   initializeVisit: () => void;
+  isInitialized: boolean;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -20,6 +21,7 @@ const USER_STORAGE_KEY = "museum-guide-user-profile";
 export function UserProvider({ children }: { children: ReactNode }) {
   const [userProfile, setUserProfileState] = useState<UserProfile | null>(null);
   const [visitId, setVisitId] = useState<string | null>(null);
+  const [isInitialized, setIsInitialized] = useState(false);
   const pathname = usePathname();
   const hasLoggedVisit = useRef<string | null>(null);
 
@@ -34,6 +36,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
         console.error("Failed to parse stored user profile:", e);
       }
     }
+    setIsInitialized(true);
   }, []);
 
   const initializeVisit = () => {
@@ -97,7 +100,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <UserContext.Provider value={{ userProfile, setUserProfile, clearUserProfile, visitId, initializeVisit }}>
+    <UserContext.Provider value={{ userProfile, setUserProfile, clearUserProfile, visitId, initializeVisit, isInitialized }}>
       {children}
     </UserContext.Provider>
   );
@@ -109,4 +112,21 @@ export function useUser() {
     throw new Error("useUser must be used within a UserProvider");
   }
   return context;
+}
+
+/**
+ * ユーザープロファイルが無い場合に /lang へリダイレクトするガード
+ * 初期化完了後にプロファイルが無ければリダイレクト
+ */
+export function useRequireUser() {
+  const { userProfile, isInitialized } = useUser();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isInitialized && !userProfile) {
+      router.replace("/lang");
+    }
+  }, [isInitialized, userProfile, router]);
+
+  return { userProfile, isReady: isInitialized && !!userProfile };
 }

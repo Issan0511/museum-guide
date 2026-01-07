@@ -11,12 +11,13 @@ import { Button } from "@/components/ui/button";
 import ChatbotModal from "@/components/modals/ChatbotModal";
 import { supabase } from "@/lib/supabase";
 import { mapCraftRow, type CraftRow } from "@/lib/supabaseMappers";
-import { useUser } from "@/contexts/UserContext";
+import { useUser, useRequireUser } from "@/contexts/UserContext";
 import { getTranslations } from "@/lib/i18n";
 
 export default function CraftPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const numericId = Number(id);
+  const { isReady } = useRequireUser();
   const [item, setItem] = useState<CraftItem | null>(null);
   const [loading, setLoading] = useState(true);
   const [missing, setMissing] = useState(false);
@@ -94,6 +95,11 @@ export default function CraftPage({ params }: { params: Promise<{ id: string }> 
     if (!item) return "";
     return pickLang(item.name, lang) ?? "";
   }, [item, lang]);
+
+  // ユーザー情報がなければリダイレクト中なので何も表示しない
+  if (!isReady) {
+    return null;
+  }
 
   if (!loading && missing) {
     return notFound();

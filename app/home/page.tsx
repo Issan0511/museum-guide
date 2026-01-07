@@ -13,10 +13,11 @@ import { getPublicUrl } from "@/lib/supabasePublic";
 import type { DemoTemplate, Event } from "@/types/types";
 import { pickLang } from "@/types/types";
 import { mapDemoTemplateRow, mapEventRow, type DemoTemplateRow, type EventRow } from "@/lib/supabaseMappers";
-import { useUser } from "@/contexts/UserContext";
+import { useUser, useRequireUser } from "@/contexts/UserContext";
 import { getTranslations } from "@/lib/i18n";
 
 export default function HomePage() {
+  const { isReady } = useRequireUser();
   const [eventOpen, setEventOpen] = useState(false);
   const [demoOpen, setDemoOpen] = useState(false);
   const [todayDemo, setTodayDemo] = useState<DemoTemplate | null>(null);
@@ -90,6 +91,11 @@ export default function HomePage() {
 
   const currentDemoName = todayDemo ? pickLang(todayDemo.name, lang) ?? "" : "";
   const currentEventName = todayEvents.length > 0 ? pickLang(todayEvents[currentEventIndex].name, lang) ?? "" : "";
+
+  // ユーザー情報がなければリダイレクト中なので何も表示しない
+  if (!isReady) {
+    return null;
+  }
 
   return (
     <div className="space-y-4">
