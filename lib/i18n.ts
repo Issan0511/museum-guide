@@ -32,6 +32,8 @@ export type SectionTranslations = {
     shopOtherDescription: string;
     shopPrimaryAria: string;
     shopOtherAria: string;
+    workshopSectionTitle: string;
+    workshopDescription: string;
   };
   langPage: {
     ageHeading: string;
@@ -93,7 +95,9 @@ const translations: Record<UserLanguage, SectionTranslations> = {
       shopTapHint: "下のアイコンをタップ",
       shopOtherDescription: "オンラインショップでその他の工芸品を見る",
       shopPrimaryAria: "MOCADショップでこの工芸品を見る",
-      shopOtherAria: "MOCADショップで他の工芸品を見る"
+      shopOtherAria: "MOCADショップで他の工芸品を見る",
+      workshopSectionTitle: "工房見学・体験",
+      workshopDescription: "あなただけの、特別な体験。"
     },
     langPage: {
       ageHeading: "年代を選択",
@@ -169,7 +173,9 @@ const translations: Record<UserLanguage, SectionTranslations> = {
       shopTapHint: "Tap the icon below",
       shopOtherDescription: "Browse other crafts in the online shop",
       shopPrimaryAria: "View this craft in the MOCAD shop",
-      shopOtherAria: "View other crafts in the MOCAD shop"
+      shopOtherAria: "View other crafts in the MOCAD shop",
+      workshopSectionTitle: "Artisan Workshop Tour & Experience",
+      workshopDescription: "A truly private experience"
     },
     langPage: {
       ageHeading: "Select age",
@@ -245,7 +251,9 @@ const translations: Record<UserLanguage, SectionTranslations> = {
       shopTapHint: "点击下方图标",
       shopOtherDescription: "在网店浏览其他工艺品",
       shopPrimaryAria: "在MOCAD商店查看此工艺品",
-      shopOtherAria: "在MOCAD商店查看其他工艺品"
+      shopOtherAria: "在MOCAD商店查看其他工艺品",
+      workshopSectionTitle: "Artisan Workshop Tour & Experience",
+      workshopDescription: "A truly private experience"
     },
     langPage: {
       ageHeading: "选择年龄",
@@ -321,7 +329,9 @@ const translations: Record<UserLanguage, SectionTranslations> = {
       shopTapHint: "Touchez l'icône ci-dessous",
       shopOtherDescription: "Découvrir d'autres artisanats dans la boutique en ligne",
       shopPrimaryAria: "Voir cet artisanat dans la boutique MOCAD",
-      shopOtherAria: "Voir d'autres artisanats dans la boutique MOCAD"
+      shopOtherAria: "Voir d'autres artisanats dans la boutique MOCAD",
+      workshopSectionTitle: "Artisan Workshop Tour & Experience",
+      workshopDescription: "A truly private experience"
     },
     langPage: {
       ageHeading: "Choisissez votre âge",
@@ -397,7 +407,9 @@ const translations: Record<UserLanguage, SectionTranslations> = {
       shopTapHint: "아래 아이콘을 탭하세요",
       shopOtherDescription: "온라인 스토어에서 다른 공예품을 둘러보기",
       shopPrimaryAria: "MOCAD 스토어에서 이 공예품 보기",
-      shopOtherAria: "MOCAD 스토어에서 다른 공예품 보기"
+      shopOtherAria: "MOCAD 스토어에서 다른 공예품 보기",
+      workshopSectionTitle: "Artisan Workshop Tour & Experience",
+      workshopDescription: "A truly private experience"
     },
     langPage: {
       ageHeading: "연령 선택",
@@ -471,9 +483,11 @@ const translations: Record<UserLanguage, SectionTranslations> = {
       shopSectionTitle: "Tienda",
       shopPrimaryDescription: "Puedes comprar esta artesanía en la tienda en línea",
       shopTapHint: "Toca el ícono de abajo",
-      shopOtherDescription: "Explora otras artesanías en la tienda en línea",
+      shopOtherDescription: "Explora otras artisanías en la tienda en línea",
       shopPrimaryAria: "Ver esta artesanía en la tienda MOCAD",
-      shopOtherAria: "Ver otras artesanías en la tienda MOCAD"
+      shopOtherAria: "Ver otras artesanías en la tienda MOCAD",
+      workshopSectionTitle: "Artisan Workshop Tour & Experience",
+      workshopDescription: "A truly private experience"
     },
     langPage: {
       ageHeading: "Selecciona tu edad",

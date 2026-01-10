@@ -27,7 +27,7 @@ export default function CraftPage({ params }: { params: Promise<{ id: string }> 
   const lang = userProfile?.language ?? "ja";
   const t = useMemo(() => getTranslations(lang), [lang]);
 
-  const logEvent = async (craftId: number, eventType: 'view' | 'shop_click', targetUrl?: string) => {
+  const logEvent = async (craftId: number, eventType: 'view' | 'shop_click' | 'workshop_click', targetUrl?: string) => {
     if (!visitId) return;
 
     const { error } = await supabase.from('craft_logs').insert({
@@ -224,6 +224,32 @@ export default function CraftPage({ params }: { params: Promise<{ id: string }> 
           </CardContent>
         </Card>
       )}
+
+      <Card className="bg-white border-neutral-200 shadow-sm">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-base font-semibold">{t.craftPage.workshopSectionTitle}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-sm text-neutral-600 mb-1">{t.craftPage.workshopDescription}</p>
+          <a
+            href="https://artisan-kyoto.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block"
+            onClick={() => logEvent(item.id, 'workshop_click', "https://artisan-kyoto.com/")}
+          >
+            <div className="relative w-full h-48 mx-auto hover:opacity-80 transition-opacity cursor-pointer">
+              <Image
+                src="/images/experience_logo.png"
+                alt="Workshop Tour"
+                fill
+                className="object-contain"
+                sizes="100vw"
+              />
+            </div>
+          </a>
+        </CardContent>
+      </Card>
 
       <Button
         className="fixed right-4 bottom-4 w-14 h-14 rounded-full bg-neutral-900 hover:bg-neutral-800 shadow-lg z-50"
