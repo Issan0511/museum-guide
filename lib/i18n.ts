@@ -157,12 +157,12 @@ const translations: Record<UserLanguage, SectionTranslations> = {
     craftGrid: {
       heading: "Craft list",
       categoryLabels: {
-        "住": "Category: Living",
-        "礼": "Category: Ceremony",
-        "食": "Category: Food",
-        "職": "Category: Work",
-        "衣": "Category: Clothing",
-        "その他": "Category: Other"
+        "住": "Category \"Living\"",
+        "礼": "Category \"Ceremony\"",
+        "食": "Category \"Food\"",
+        "職": "Category \"Work\"",
+        "衣": "Category \"Clothing\"",
+        "その他": "Category \"Other\""
       }
     },
     craftPage: {
@@ -235,12 +235,12 @@ const translations: Record<UserLanguage, SectionTranslations> = {
     craftGrid: {
       heading: "工艺列表",
       categoryLabels: {
-        "住": "类别：居住",
-        "礼": "类别：礼仪",
-        "食": "类别：饮食",
-        "職": "类别：工作",
-        "衣": "类别：服饰",
-        "その他": "类别：其他"
+        "住": "Category \"居住\"",
+        "礼": "Category \"礼仪\"",
+        "食": "Category \"饮食\"",
+        "職": "Category \"工作\"",
+        "衣": "Category \"服饰\"",
+        "その他": "Category \"其他\""
       }
     },
     craftPage: {
@@ -313,12 +313,12 @@ const translations: Record<UserLanguage, SectionTranslations> = {
     craftGrid: {
       heading: "Liste des artisanats",
       categoryLabels: {
-        "住": "Catégorie : Habitat",
-        "礼": "Catégorie : Cérémonie",
-        "食": "Catégorie : Alimentation",
-        "職": "Catégorie : Travail",
-        "衣": "Catégorie : Vêtements",
-        "その他": "Catégorie : Autre"
+        "住": "Category \"Habitat\"",
+        "礼": "Category \"Cérémonie\"",
+        "食": "Category \"Alimentation\"",
+        "職": "Category \"Travail\"",
+        "衣": "Category \"Vêtements\"",
+        "その他": "Category \"Autre\""
       }
     },
     craftPage: {
@@ -391,12 +391,12 @@ const translations: Record<UserLanguage, SectionTranslations> = {
     craftGrid: {
       heading: "공예 목록",
       categoryLabels: {
-        "住": "카테고리: 주거",
-        "礼": "카테고리: 예절",
-        "食": "카테고리: 음식",
-        "職": "카테고리: 직업",
-        "衣": "카테고리: 의복",
-        "その他": "카테고리: 기타"
+        "住": "Category \"주거\"",
+        "礼": "Category \"예절\"",
+        "食": "Category \"음식\"",
+        "職": "Category \"직업\"",
+        "衣": "Category \"의복\"",
+        "その他": "Category \"기타\""
       }
     },
     craftPage: {
@@ -469,12 +469,12 @@ const translations: Record<UserLanguage, SectionTranslations> = {
     craftGrid: {
       heading: "Lista de artesanías",
       categoryLabels: {
-        "住": "Categoría: Vivienda",
-        "礼": "Categoría: Ceremonia",
-        "食": "Categoría: Gastronomía",
-        "職": "Categoría: Trabajo",
-        "衣": "Categoría: Vestimenta",
-        "その他": "Categoría: Otros"
+        "住": "Category \"Vivienda\"",
+        "礼": "Category \"Ceremonia\"",
+        "食": "Category \"Gastronomía\"",
+        "職": "Category \"Trabajo\"",
+        "衣": "Category \"Vestimenta\"",
+        "その他": "Category \"Otros\""
       }
     },
     craftPage: {
