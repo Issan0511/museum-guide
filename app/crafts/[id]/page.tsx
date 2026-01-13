@@ -225,6 +225,10 @@ export default function CraftPage({ params }: { params: Promise<{ id: string }> 
         </Card>
       )}
 
+      {/* 点線の区切り線 */}
+      <hr className="border-t border-dashed border-neutral-300 my-4" />
+
+      
       <Card className="bg-white border-neutral-200 shadow-sm">
         <CardHeader className="pb-3">
           <CardTitle className="text-base font-semibold">{t.craftPage.workshopSectionTitle}</CardTitle>
