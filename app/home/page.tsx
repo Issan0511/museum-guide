@@ -68,7 +68,7 @@ export default function HomePage() {
           .select("*")
           .lte("start_date", todayStr)
           .gte("end_date", todayStr)
-          .order("start_date", { ascending: true });
+          .order("display_order", { ascending: true });
 
         if (eventsError || !eventsData) {
           setTodayEvents([]);

@@ -134,6 +134,7 @@ export function mapDemoTemplateRow(row: DemoTemplateRow): DemoTemplate {
 
 export type EventRow = {
   id: number;
+  display_order: number | null;
   name_ja: string | null;
   name_en: string | null;
   name_zh: string | null;
@@ -153,6 +154,7 @@ export type EventRow = {
 export function mapEventRow(row: EventRow): Event {
   return {
     id: row.id,
+    displayOrder: row.display_order ?? undefined,
     name: toMultilang({
       ja: row.name_ja ?? undefined,
       en: row.name_en ?? undefined,
