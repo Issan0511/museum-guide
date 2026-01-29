@@ -141,6 +141,7 @@ export default function ChatbotModal({ open, onClose, craftSlug, craftName, craf
             content: msg.content
           })),
           craftSlug: craftSlug,
+          craftId: craftId,
           userProfile: userProfile
         }),
       });

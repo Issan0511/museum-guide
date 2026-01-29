@@ -257,7 +257,10 @@ export default function CraftPage({ params }: { params: Promise<{ id: string }> 
 
       <Button
         className="fixed right-4 bottom-4 w-14 h-14 rounded-full bg-neutral-900 hover:bg-neutral-800 shadow-lg z-50"
-        onClick={() => setChatOpen(true)}
+        onClick={() => {
+          console.log('Opening chat with slug:', item?.slug);
+          setChatOpen(true);
+        }}
       >
         <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
           <path d="M4 4h16v10H7l-3 3V4z" />
@@ -271,6 +274,7 @@ export default function CraftPage({ params }: { params: Promise<{ id: string }> 
         craftId={item?.id}
         lang={lang} 
       />
+      {/* DEBUG: item.slug = {item?.slug} */}
     </div>
   );
 }

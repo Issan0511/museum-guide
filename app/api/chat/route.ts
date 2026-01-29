@@ -1,16 +1,21 @@
 import { NextRequest } from "next/server";
 import OpenAI from "openai";
-import { SEED } from "@/data/crafts.seed";
 import type { CraftItem } from "@/types/craft";
 import type { UserProfile } from "@/types/types";
 import { buildSystemPrompt } from "@/lib/chatPrompts";
+import { supabase } from "@/lib/supabase";
+import { mapCraftRow, type CraftRow } from "@/lib/supabaseMappers";
 
 export const runtime = "nodejs";
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 export async function POST(req: NextRequest) {
-  const { messages, craftSlug, userProfile } = await req.json();
+  const { messages, craftId, userProfile } = await req.json();
+
+  console.log('=== リクエスト情報 ===');
+  console.log('craftId:', craftId);
+  console.log('userProfile:', userProfile);
 
   if (!messages || !Array.isArray(messages)) {
     return new Response(JSON.stringify({ error: "Invalid messages format" }), {
@@ -19,11 +24,25 @@ export async function POST(req: NextRequest) {
   }
 
   let craftItem: CraftItem | undefined;
-  if (craftSlug) {
-    craftItem = (SEED as CraftItem[]).find((c) => c.slug === craftSlug);
+  if (craftId) {
+    const { data, error } = await supabase
+      .from("crafts")
+      .select("*")
+      .eq("id", craftId)
+      .maybeSingle();
+    
+    if (!error && data) {
+      craftItem = mapCraftRow(data as CraftRow);
+    }
   }
 
   const systemPrompt = await buildSystemPrompt(userProfile, craftItem);
+
+  console.log('=== システムプロンプト ===');
+  console.log(systemPrompt);
+  console.log('=== メッセージ履歴 ===');
+  console.log(JSON.stringify(messages, null, 2));
+  console.log('========================');
 
   const stream = new ReadableStream({
     async start(controller) {
