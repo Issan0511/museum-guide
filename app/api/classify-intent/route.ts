@@ -23,7 +23,8 @@ const INTENT_CLASSIFICATION_PROMPT = `あなたは質問の意図を分類する
 - access_location: 展示場所・工房所在地・アクセス方法について
 - facility_rules: 撮影可否・開館時間・ルール・サービスについて
 - child_beginner: 初心者向け・子ども向け・対象年代について
-- other: 上記のいずれにも当てはまらない、質問の意味がわからない場合
+- other: 上記のいずれにも当てはまらない
+- unclassified: 意図が不明瞭で分類できない
 
 ## 重要な指示
 
