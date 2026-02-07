@@ -9,6 +9,7 @@ import type { UserLanguage } from "@/types/types";
 import { supabase } from "@/lib/supabase";
 
 const INTENT_KEYS = [
+  'overview',        // 工芸品全般の概要・定義
   'material',        // 素材・原料・道具・耐久性
   'history',         // 歴史・起源・文化背景
   'process',         // 技法・工程・作り方
@@ -25,12 +26,12 @@ const INTENT_KEYS = [
 
 type IntentKey = typeof INTENT_KEYS[number];
 
-async function classifyIntent(question: string): Promise<IntentKey> {
+async function classifyIntent(question: string, craftName?: string): Promise<IntentKey> {
   try {
     const response = await fetch('/api/classify-intent', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ question })
+      body: JSON.stringify({ question, craftName })
     });
     if (response.ok) {
       const data = await response.json();
@@ -112,7 +113,7 @@ export default function ChatbotModal({ open, onClose, craftSlug, craftName, craf
 
     // Log chat to Supabase with intent classification
     if (visitId) {
-      classifyIntent(text).then((intent) => {
+      classifyIntent(text, craftName).then((intent) => {
         supabase.from('chat_logs').insert({
           visit_id: visitId,
           craft_id: craftId || null,

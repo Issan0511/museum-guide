@@ -38,11 +38,7 @@ export async function POST(req: NextRequest) {
 
   const systemPrompt = await buildSystemPrompt(userProfile, craftItem);
 
-  console.log('=== システムプロンプト ===');
-  console.log(systemPrompt);
-  console.log('=== メッセージ履歴 ===');
-  console.log(JSON.stringify(messages, null, 2));
-  console.log('========================');
+
 
   const stream = new ReadableStream({
     async start(controller) {

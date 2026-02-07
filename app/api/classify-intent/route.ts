@@ -11,6 +11,7 @@ const INTENT_CLASSIFICATION_PROMPT = `あなたは質問の意図を分類する
 
 ## カテゴリ一覧
 
+- overview: 工芸品全般の概要・定義・「〜とは何か」について
 - material: 素材・原料・道具・耐久性について
 - history: 歴史・起源・文化背景について
 - process: 技法・工程・作り方について
@@ -21,8 +22,8 @@ const INTENT_CLASSIFICATION_PROMPT = `あなたは質問の意図を分類する
 - experience: ワークショップ・体験・所要時間について
 - access_location: 展示場所・工房所在地・アクセス方法について
 - facility_rules: 撮影可否・開館時間・ルール・サービスについて
- - child_beginner: 初心者向け・子ども向け・対象年代について
-- other: 上記のいずれにも当てはまらない場合
+- child_beginner: 初心者向け・子ども向け・対象年代について
+- other: 上記のいずれにも当てはまらない、質問の意味がわからない場合
 
 ## 重要な指示
 
@@ -32,6 +33,9 @@ const INTENT_CLASSIFICATION_PROMPT = `あなたは質問の意図を分類する
 
 ## 例
 
+質問: "西陣織とはなんですか？"
+回答: overview
+
 質問: "この織物の値段はいくらですか？"
 回答: price
 
@@ -40,7 +44,7 @@ const INTENT_CLASSIFICATION_PROMPT = `あなたは質問の意図を分類する
 
 export async function POST(req: NextRequest) {
   try {
-    const { question } = await req.json();
+    const { question, craftName } = await req.json();
 
     if (!question || typeof question !== "string") {
       return new Response(JSON.stringify({ intent: "other" }), {
@@ -49,10 +53,14 @@ export async function POST(req: NextRequest) {
       });
     }
 
+    const systemPrompt = craftName 
+      ? `あなたは「${craftName}」という工芸品に関する質問の意図を分類するアシスタントです。\n${INTENT_CLASSIFICATION_PROMPT}`
+      : INTENT_CLASSIFICATION_PROMPT;
+
     const response = await openai.chat.completions.create({
       model: "gpt-5-nano",
       messages: [
-        { role: "system", content: INTENT_CLASSIFICATION_PROMPT },
+        { role: "system", content: systemPrompt },
         { role: "user", content: question },
       ],
 
@@ -62,6 +70,7 @@ export async function POST(req: NextRequest) {
     const intent = rawContent.trim().toLowerCase();
 
     const validIntents = [
+      "overview",
       "material",
       "history",
       "process",
