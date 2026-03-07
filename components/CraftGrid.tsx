@@ -19,8 +19,13 @@ const CRAFT_GRID_STATE_KEY = "craftGridState";
 
 type CraftGridState = {
   openCategories: Record<CraftCategory, boolean>;
-  scrollY: number;
+  lastCategory: CraftCategory;
+  lastCraftId?: number;
 };
+
+function isCraftCategory(value: unknown): value is CraftCategory {
+  return typeof value === "string" && CATEGORY_ORDER.includes(value as CraftCategory);
+}
 
 function categoryFromDisplayOrder(displayOrder?: number): CraftCategory {
   if (displayOrder === undefined || displayOrder === null) return "その他";
@@ -86,6 +91,9 @@ export default function CraftGrid({ lang = "ja" }: Props) {
 
     try {
       const parsed = JSON.parse(rawState) as CraftGridState;
+      if (!isCraftCategory(parsed.lastCategory)) {
+        throw new Error("Invalid lastCategory in craft grid state");
+      }
       setRestoreState(parsed);
     } catch (error) {
       console.error("Failed to parse craft grid state", error);
@@ -96,9 +104,23 @@ export default function CraftGrid({ lang = "ja" }: Props) {
   useEffect(() => {
     if (!restoreState || loading) return;
 
-    setOpenCategories(restoreState.openCategories);
+    const nextOpenCategories = {
+      ...restoreState.openCategories,
+      [restoreState.lastCategory]: true
+    };
+
+    setOpenCategories(nextOpenCategories);
     const restoreTimer = window.setTimeout(() => {
-      window.scrollTo({ top: restoreState.scrollY, behavior: "auto" });
+      const craftId = restoreState.lastCraftId;
+      const craftElementId = typeof craftId === "number" ? `craft-item-${craftId}` : null;
+      const categoryHeadingId = `craft-category-heading-${restoreState.lastCategory}`;
+      const craftElement = craftElementId ? window.document.getElementById(craftElementId) : null;
+      const target = craftElement ?? window.document.getElementById(categoryHeadingId);
+
+      if (target) {
+        target.scrollIntoView({ block: "center" });
+        window.sessionStorage.removeItem(CRAFT_GRID_STATE_KEY);
+      }
     }, 0);
 
     return () => {
@@ -106,12 +128,21 @@ export default function CraftGrid({ lang = "ja" }: Props) {
     };
   }, [restoreState, loading]);
 
-  const persistGridState = (nextOpenCategories = openCategories) => {
+  const persistGridState = ({
+    nextOpenCategories = openCategories,
+    lastCategory,
+    lastCraftId
+  }: {
+    nextOpenCategories?: Record<CraftCategory, boolean>;
+    lastCategory: CraftCategory;
+    lastCraftId?: number;
+  }) => {
     if (typeof window === "undefined") return;
 
     const state: CraftGridState = {
       openCategories: nextOpenCategories,
-      scrollY: window.scrollY
+      lastCategory,
+      lastCraftId
     };
     window.sessionStorage.setItem(CRAFT_GRID_STATE_KEY, JSON.stringify(state));
   };
@@ -161,6 +192,7 @@ export default function CraftGrid({ lang = "ja" }: Props) {
             <section key={group.category} className="space-y-2">
               <button
                 type="button"
+                id={`craft-category-heading-${group.category}`}
                 className="w-full flex items-center justify-between text-left text-sm font-semibold text-neutral-800 bg-neutral-50 border border-neutral-200 rounded-lg px-3 py-3 hover:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:ring-offset-2"
                 aria-expanded={openCategories[group.category]}
                 aria-controls={`craft-category-${group.category}`}
@@ -170,7 +202,10 @@ export default function CraftGrid({ lang = "ja" }: Props) {
                     [group.category]: !openCategories[group.category]
                   };
                   setOpenCategories(nextOpenCategories);
-                  persistGridState(nextOpenCategories);
+                  persistGridState({
+                    nextOpenCategories,
+                    lastCategory: group.category
+                  });
                 }}
               >
                 <span>{group.heading}</span>
@@ -195,8 +230,12 @@ export default function CraftGrid({ lang = "ja" }: Props) {
                 {group.items.map((item) => (
                   <button
                     key={item.id}
+                    id={`craft-item-${item.id}`}
                     onClick={() => {
-                      persistGridState();
+                      persistGridState({
+                        lastCategory: group.category,
+                        lastCraftId: item.id
+                      });
                       router.push(`/crafts/${item.id}`);
                     }}
                     className="bg-neutral-50 border border-neutral-200 rounded-lg p-2.5 hover:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:ring-offset-2 transition-colors flex flex-col"
