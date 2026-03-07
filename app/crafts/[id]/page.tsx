@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { notFound } from "next/navigation";
+import { notFound, useRouter } from "next/navigation";
 import { use, useEffect, useMemo, useState } from "react";
 import type { CraftItem } from "@/types/types";
 import { pickLang } from "@/types/types";
@@ -17,6 +17,7 @@ import { getTranslations } from "@/lib/i18n";
 export default function CraftPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const numericId = Number(id);
+  const router = useRouter();
   const { isReady } = useRequireUser();
   const [item, setItem] = useState<CraftItem | null>(null);
   const [loading, setLoading] = useState(true);
@@ -26,6 +27,10 @@ export default function CraftPage({ params }: { params: Promise<{ id: string }> 
   const { userProfile, visitId } = useUser();
   const lang = userProfile?.language ?? "ja";
   const t = useMemo(() => getTranslations(lang), [lang]);
+
+  const backToCraftList = () => {
+    router.push("/home?restoreCraftGrid=1");
+  };
 
   const logEvent = async (craftId: number, eventType: 'view' | 'shop_click' | 'workshop_click', targetUrl?: string) => {
     if (!visitId) return;
@@ -108,7 +113,7 @@ export default function CraftPage({ params }: { params: Promise<{ id: string }> 
   if (loading || !item) {
     return (
       <div className="space-y-6">
-        <button onClick={() => history.back()} className="text-sm text-neutral-700 hover:text-neutral-900 mb-3">
+        <button onClick={backToCraftList} className="text-sm text-neutral-700 hover:text-neutral-900 mb-3">
           {t.craftPage.backToList}
         </button>
         <div className="space-y-3">
@@ -122,7 +127,7 @@ export default function CraftPage({ params }: { params: Promise<{ id: string }> 
 
   return (
     <div className="space-y-6">
-      <button onClick={() => history.back()} className="text-sm text-neutral-700 hover:text-neutral-900 mb-3">
+      <button onClick={backToCraftList} className="text-sm text-neutral-700 hover:text-neutral-900 mb-3">
         {t.craftPage.backToList}
       </button>
 

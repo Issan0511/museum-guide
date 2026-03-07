@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import type { CraftItem, Lang } from "@/types/types";
 import { pickLang } from "@/types/types";
@@ -15,6 +15,12 @@ type Props = { lang?: Lang };
 type CraftCategory = "住" | "礼" | "食" | "職" | "衣" | "その他";
 
 const CATEGORY_ORDER: CraftCategory[] = ["住", "礼", "食", "職", "衣", "その他"];
+const CRAFT_GRID_STATE_KEY = "craftGridState";
+
+type CraftGridState = {
+  openCategories: Record<CraftCategory, boolean>;
+  scrollY: number;
+};
 
 function categoryFromDisplayOrder(displayOrder?: number): CraftCategory {
   if (displayOrder === undefined || displayOrder === null) return "その他";
@@ -29,8 +35,10 @@ function categoryFromDisplayOrder(displayOrder?: number): CraftCategory {
 
 export default function CraftGrid({ lang = "ja" }: Props) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [crafts, setCrafts] = useState<CraftItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [restoreState, setRestoreState] = useState<CraftGridState | null>(null);
   const [openCategories, setOpenCategories] = useState<Record<CraftCategory, boolean>>({
     "住": false,
     "礼": false,
@@ -68,6 +76,45 @@ export default function CraftGrid({ lang = "ja" }: Props) {
       active = false;
     };
   }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (searchParams.get("restoreCraftGrid") !== "1") return;
+
+    const rawState = window.sessionStorage.getItem(CRAFT_GRID_STATE_KEY);
+    if (!rawState) return;
+
+    try {
+      const parsed = JSON.parse(rawState) as CraftGridState;
+      setRestoreState(parsed);
+    } catch (error) {
+      console.error("Failed to parse craft grid state", error);
+      window.sessionStorage.removeItem(CRAFT_GRID_STATE_KEY);
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
+    if (!restoreState || loading) return;
+
+    setOpenCategories(restoreState.openCategories);
+    const restoreTimer = window.setTimeout(() => {
+      window.scrollTo({ top: restoreState.scrollY, behavior: "auto" });
+    }, 0);
+
+    return () => {
+      window.clearTimeout(restoreTimer);
+    };
+  }, [restoreState, loading]);
+
+  const persistGridState = (nextOpenCategories = openCategories) => {
+    if (typeof window === "undefined") return;
+
+    const state: CraftGridState = {
+      openCategories: nextOpenCategories,
+      scrollY: window.scrollY
+    };
+    window.sessionStorage.setItem(CRAFT_GRID_STATE_KEY, JSON.stringify(state));
+  };
 
   const t = useMemo(() => getTranslations(lang), [lang]);
 
@@ -117,12 +164,14 @@ export default function CraftGrid({ lang = "ja" }: Props) {
                 className="w-full flex items-center justify-between text-left text-sm font-semibold text-neutral-800 bg-neutral-50 border border-neutral-200 rounded-lg px-3 py-3 hover:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:ring-offset-2"
                 aria-expanded={openCategories[group.category]}
                 aria-controls={`craft-category-${group.category}`}
-                onClick={() =>
-                  setOpenCategories((prev) => ({
-                    ...prev,
-                    [group.category]: !prev[group.category]
-                  }))
-                }
+                onClick={() => {
+                  const nextOpenCategories = {
+                    ...openCategories,
+                    [group.category]: !openCategories[group.category]
+                  };
+                  setOpenCategories(nextOpenCategories);
+                  persistGridState(nextOpenCategories);
+                }}
               >
                 <span>{group.heading}</span>
                 <svg
@@ -146,7 +195,10 @@ export default function CraftGrid({ lang = "ja" }: Props) {
                 {group.items.map((item) => (
                   <button
                     key={item.id}
-                    onClick={() => router.push(`/crafts/${item.id}`)}
+                    onClick={() => {
+                      persistGridState();
+                      router.push(`/crafts/${item.id}`);
+                    }}
                     className="bg-neutral-50 border border-neutral-200 rounded-lg p-2.5 hover:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:ring-offset-2 transition-colors flex flex-col"
                   >
                     <div className="relative w-full aspect-[4/3] mb-2 rounded overflow-hidden bg-gray-100 flex-shrink-0">
