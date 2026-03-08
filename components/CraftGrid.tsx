@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import type { CraftItem, Lang } from "@/types/types";
 import { pickLang } from "@/types/types";
@@ -40,7 +40,6 @@ function categoryFromDisplayOrder(displayOrder?: number): CraftCategory {
 
 export default function CraftGrid({ lang = "ja" }: Props) {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [crafts, setCrafts] = useState<CraftItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [restoreState, setRestoreState] = useState<CraftGridState | null>(null);
@@ -84,7 +83,6 @@ export default function CraftGrid({ lang = "ja" }: Props) {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    if (searchParams.get("restoreCraftGrid") !== "1") return;
 
     const rawState = window.sessionStorage.getItem(CRAFT_GRID_STATE_KEY);
     if (!rawState) return;
@@ -99,7 +97,7 @@ export default function CraftGrid({ lang = "ja" }: Props) {
       console.error("Failed to parse craft grid state", error);
       window.sessionStorage.removeItem(CRAFT_GRID_STATE_KEY);
     }
-  }, [searchParams]);
+  }, []);
 
   useEffect(() => {
     if (!restoreState || loading) return;
@@ -120,8 +118,9 @@ export default function CraftGrid({ lang = "ja" }: Props) {
       if (target) {
         target.scrollIntoView({ block: "center" });
         window.sessionStorage.removeItem(CRAFT_GRID_STATE_KEY);
+        setRestoreState(null);
       }
-    }, 0);
+    }, 200);
 
     return () => {
       window.clearTimeout(restoreTimer);

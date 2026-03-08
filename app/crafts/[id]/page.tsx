@@ -29,7 +29,7 @@ export default function CraftPage({ params }: { params: Promise<{ id: string }> 
   const t = useMemo(() => getTranslations(lang), [lang]);
 
   const backToCraftList = () => {
-    router.push("/home?restoreCraftGrid=1");
+    router.push("/home");
   };
 
   const logEvent = async (craftId: number, eventType: 'view' | 'shop_click' | 'workshop_click', targetUrl?: string) => {
