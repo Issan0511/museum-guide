@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import EventModal from "@/components/modals/EventModal";
@@ -17,6 +18,7 @@ import { useUser, useRequireUser } from "@/contexts/UserContext";
 import { getTranslations } from "@/lib/i18n";
 
 export default function HomePage() {
+  const router = useRouter();
   const { isReady } = useRequireUser();
   const [eventOpen, setEventOpen] = useState(false);
   const [demoOpen, setDemoOpen] = useState(false);
@@ -91,6 +93,9 @@ export default function HomePage() {
 
   const currentDemoName = todayDemo ? pickLang(todayDemo.name, lang) ?? "" : "";
   const currentEventName = todayEvents.length > 0 ? pickLang(todayEvents[currentEventIndex].name, lang) ?? "" : "";
+  const backToLanguageSelection = () => {
+    router.push("/lang");
+  };
 
   // ユーザー情報がなければリダイレクト中なので何も表示しない
   if (!isReady) {
@@ -99,7 +104,7 @@ export default function HomePage() {
 
   return (
     <div className="space-y-4">
-      <button onClick={() => history.back()} className="text-sm text-neutral-700 hover:text-neutral-900 mb-3">
+      <button onClick={backToLanguageSelection} className="text-sm text-neutral-700 hover:text-neutral-900 mb-3">
         {t.home.backToLanguageSelection}
       </button>
 
