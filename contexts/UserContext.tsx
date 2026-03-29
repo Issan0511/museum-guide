@@ -12,6 +12,8 @@ interface UserContextType {
   visitId: string | null;
   initializeVisit: () => void;
   isInitialized: boolean;
+  hasSeenCraftChatHint: boolean;
+  markCraftChatHintShown: () => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -22,6 +24,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
   const [userProfile, setUserProfileState] = useState<UserProfile | null>(null);
   const [visitId, setVisitId] = useState<string | null>(null);
   const [isInitialized, setIsInitialized] = useState(false);
+  const [hasSeenCraftChatHint, setHasSeenCraftChatHint] = useState(false);
   const pathname = usePathname();
   const hasLoggedVisit = useRef<string | null>(null);
 
@@ -48,7 +51,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
   // Auto-initialize visit if not on lang page and have profile
   useEffect(() => {
     if (userProfile && !visitId && pathname && !pathname.startsWith('/lang')) {
-      initializeVisit();
+      setVisitId(crypto.randomUUID());
     }
   }, [userProfile, visitId, pathname]);
 
@@ -97,10 +100,22 @@ export function UserProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem(USER_STORAGE_KEY);
     setVisitId(null);
     hasLoggedVisit.current = null;
+    setHasSeenCraftChatHint(false);
   };
 
   return (
-    <UserContext.Provider value={{ userProfile, setUserProfile, clearUserProfile, visitId, initializeVisit, isInitialized }}>
+    <UserContext.Provider
+      value={{
+        userProfile,
+        setUserProfile,
+        clearUserProfile,
+        visitId,
+        initializeVisit,
+        isInitialized,
+        hasSeenCraftChatHint,
+        markCraftChatHintShown: () => setHasSeenCraftChatHint(true)
+      }}
+    >
       {children}
     </UserContext.Provider>
   );

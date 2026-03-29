@@ -23,8 +23,9 @@ export default function CraftPage({ params }: { params: Promise<{ id: string }> 
   const [loading, setLoading] = useState(true);
   const [missing, setMissing] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
+  const [chatHintOpen, setChatHintOpen] = useState(false);
   const [aspectRatio, setAspectRatio] = useState(16 / 9);
-  const { userProfile, visitId } = useUser();
+  const { userProfile, visitId, hasSeenCraftChatHint, markCraftChatHintShown } = useUser();
   const lang = userProfile?.language ?? "ja";
   const t = useMemo(() => getTranslations(lang), [lang]);
 
@@ -49,10 +50,39 @@ export default function CraftPage({ params }: { params: Promise<{ id: string }> 
   };
 
   useEffect(() => {
-    if (item?.id && visitId) {
-      logEvent(item.id, 'view');
-    }
+    if (!item?.id || !visitId) return;
+
+    supabase.from('craft_logs').insert({
+      visit_id: visitId,
+      craft_id: item.id,
+      event_type: 'view',
+      target_url: null,
+      source: 'app'
+    }).then(({ error }) => {
+      if (error) {
+        console.error('Error logging event:', error);
+      }
+    });
   }, [item?.id, visitId]);
+
+  useEffect(() => {
+    if (loading || !item || !visitId || hasSeenCraftChatHint) return;
+
+    setChatHintOpen(true);
+    markCraftChatHintShown();
+  }, [hasSeenCraftChatHint, item, loading, markCraftChatHintShown, visitId]);
+
+  useEffect(() => {
+    if (!chatHintOpen) return;
+
+    const timer = window.setTimeout(() => {
+      setChatHintOpen(false);
+    }, 7000);
+
+    return () => {
+      window.clearTimeout(timer);
+    };
+  }, [chatHintOpen]);
 
   useEffect(() => {
     if (Number.isNaN(numericId)) {
@@ -100,6 +130,11 @@ export default function CraftPage({ params }: { params: Promise<{ id: string }> 
     if (!item) return "";
     return pickLang(item.name, lang) ?? "";
   }, [item, lang]);
+
+  const openChat = () => {
+    setChatHintOpen(false);
+    setChatOpen(true);
+  };
 
   // ユーザー情報がなければリダイレクト中なので何も表示しない
   if (!isReady) {
@@ -260,11 +295,36 @@ export default function CraftPage({ params }: { params: Promise<{ id: string }> 
         </CardContent>
       </Card>
 
+      {chatHintOpen ? (
+        <div className="fixed right-4 bottom-24 z-50 w-72 max-w-[calc(100vw-2rem)]">
+          <div className="relative rounded-2xl border border-neutral-200 bg-white/95 p-4 shadow-xl backdrop-blur-sm">
+            <button
+              type="button"
+              className="absolute top-2 right-2 text-neutral-400 hover:text-neutral-700"
+              aria-label={t.chatbot.hintDismiss}
+              onClick={() => setChatHintOpen(false)}
+            >
+              ×
+            </button>
+            <p className="pr-6 text-sm font-semibold text-neutral-900">{t.chatbot.hintTitle}</p>
+            <p className="mt-1 text-sm leading-relaxed text-neutral-600">{t.chatbot.hintDescription}</p>
+            <button
+              type="button"
+              className="mt-3 text-sm font-semibold text-blue-600 hover:text-blue-700"
+              onClick={openChat}
+            >
+              {t.chatbot.hintAction}
+            </button>
+            <div className="absolute -bottom-2 right-6 h-4 w-4 rotate-45 border-b border-r border-neutral-200 bg-white" />
+          </div>
+        </div>
+      ) : null}
+
       <Button
         className="fixed right-4 bottom-4 w-14 h-14 rounded-full bg-neutral-900 hover:bg-neutral-800 shadow-lg z-50"
         onClick={() => {
           console.log('Opening chat with slug:', item?.slug);
-          setChatOpen(true);
+          openChat();
         }}
       >
         <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">

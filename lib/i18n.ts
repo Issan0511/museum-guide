@@ -48,6 +48,10 @@ export type SectionTranslations = {
     title: string;
     intro: string[];
     craftIntro: string[];
+    hintTitle: string;
+    hintDescription: string;
+    hintAction: string;
+    hintDismiss: string;
     typing: string;
     inputPlaceholder: string;
     send: string;
@@ -128,6 +132,10 @@ const translations: Record<UserLanguage, SectionTranslations> = {
         "こんにちは！{craftName}についての質問にお答えします。",
         "工芸品の詳細や歴史についてお聞きください。"
       ],
+      hintTitle: "右下の AI チャットで質問できます",
+      hintDescription: "この工芸について気になることがあれば、右下のボタンから AI に質問できます。",
+      hintAction: "チャットを開く",
+      hintDismiss: "チャット案内を閉じる",
       typing: "回答を作成中...",
       inputPlaceholder: "メッセージを入力してください...",
       send: "送信",
@@ -206,6 +214,10 @@ const translations: Record<UserLanguage, SectionTranslations> = {
         "Hello! I can answer questions about {craftName}.",
         "Ask me about the craft's details or history."
       ],
+      hintTitle: "You can ask the AI in the bottom right",
+      hintDescription: "If you want to know more about this craft, open the AI chat from the button in the bottom right.",
+      hintAction: "Open chat",
+      hintDismiss: "Close chat hint",
       typing: "Composing a reply...",
       inputPlaceholder: "Type your message...",
       send: "Send",
@@ -284,6 +296,10 @@ const translations: Record<UserLanguage, SectionTranslations> = {
         "你好！我可以回答关于{craftName}的问题。",
         "请询问工艺品的细节或历史。"
       ],
+      hintTitle: "右下角有 AI 聊天可供提问",
+      hintDescription: "如果你想进一步了解这项工艺，可以通过右下角的按钮打开 AI 聊天。",
+      hintAction: "打开聊天",
+      hintDismiss: "关闭聊天提示",
       typing: "正在生成回复...",
       inputPlaceholder: "请输入消息...",
       send: "发送",
@@ -362,6 +378,10 @@ const translations: Record<UserLanguage, SectionTranslations> = {
         "Bonjour ! Je peux répondre aux questions sur {craftName}.",
         "Demandez-moi des détails sur l'artisanat ou son histoire."
       ],
+      hintTitle: "Le chat IA est en bas à droite",
+      hintDescription: "Si vous voulez en savoir plus sur cet artisanat, ouvrez le chat IA avec le bouton en bas à droite.",
+      hintAction: "Ouvrir le chat",
+      hintDismiss: "Fermer l'indication du chat",
       typing: "Rédaction en cours...",
       inputPlaceholder: "Saisissez votre message...",
       send: "Envoyer",
@@ -440,6 +460,10 @@ const translations: Record<UserLanguage, SectionTranslations> = {
         "안녕하세요! {craftName}에 대해 질문에 답변해 드리겠습니다.",
         "공예품의 세부 사항이나 역사에 대해 물어보세요."
       ],
+      hintTitle: "오른쪽 아래 AI 채팅으로 질문할 수 있습니다",
+      hintDescription: "이 공예에 대해 더 알고 싶다면 오른쪽 아래 버튼으로 AI 채팅을 열어 보세요.",
+      hintAction: "채팅 열기",
+      hintDismiss: "채팅 안내 닫기",
       typing: "답변을 작성하는 중...",
       inputPlaceholder: "메시지를 입력하세요...",
       send: "보내기",
@@ -518,6 +542,10 @@ const translations: Record<UserLanguage, SectionTranslations> = {
         "¡Hola! Puedo responder preguntas sobre {craftName}.",
         "Pregúntame sobre los detalles de la artesanía o su historia."
       ],
+      hintTitle: "Puedes usar el chat con IA abajo a la derecha",
+      hintDescription: "Si quieres saber más sobre esta artesanía, abre el chat con IA desde el botón de abajo a la derecha.",
+      hintAction: "Abrir chat",
+      hintDismiss: "Cerrar aviso del chat",
       typing: "Redactando respuesta...",
       inputPlaceholder: "Escribe tu mensaje...",
       send: "Enviar",
